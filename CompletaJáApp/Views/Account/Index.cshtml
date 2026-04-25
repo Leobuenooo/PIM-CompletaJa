@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "CompletaJá - Login";
+    // Removendo o layout padrão caso queira a página ocupando a tela toda limpa
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <!-- Link para o seu CSS -->
+    <link rel="stylesheet" href="~/css/login.css" />
+    <!-- FontAwesome para os ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <div class="logo-icon">
+                <i class="fa-solid fa-layer-group"></i> <!-- Ícone representativo -->
+            </div>
+            <h1>CompletaJá</h1>
+            <p>Complete seu álbum com amigos!</p>
+        </div>
+
+        <div class="form-container">
+            <!-- Toggle de Navegação -->
+            <div class="toggle-box">
+                <button id="btn-login" class="toggle-btn active" onclick="switchTab('login')">Entrar</button>
+                <button id="btn-signup" class="toggle-btn" onclick="switchTab('signup')">Criar Conta</button>
+            </div>
+
+            <!-- Formulário de LOGIN -->
+            <form id="form-login" asp-controller="Account" asp-action="Login" method="post">
+                <div class="input-group">
+                    <label>E-mail</label>
+                    <div class="input-field">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" name="Email" placeholder="seu@email.com" required />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Senha</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="login-pwd" name="Senha" placeholder="••••••••" required />
+                        <i class="fa-regular fa-eye toggle-pwd" onclick="togglePassword('login-pwd')"></i>
+                    </div>
+                </div>
+
+                <div class="forgot-pwd">
+                    <a asp-controller="Account" asp-action="ForgotPassword">Esqueci minha senha</a>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Entrar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Formulário de CRIAR CONTA (Oculto por padrão) -->
+            <form id="form-signup" asp-controller="Account" asp-action="Register" method="post" style="display: none;">
+                <div class="input-group">
+                    <label>Nome ou Apelido</label>
+                    <div class="input-field">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" name="Nome" placeholder="Como deseja ser chamado" required />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>E-mail</label>
+                    <div class="input-field">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" name="Email" placeholder="seu@email.com" required />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Senha</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-pwd" name="Senha" placeholder="Crie uma Senha" required />
+                        <i class="fa-regular fa-eye toggle-pwd" onclick="togglePassword('reg-pwd')"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Senha</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-pwd-conf" name="ConfirmaSenha" placeholder="Repita a Senha" required />
+                        <i class="fa-regular fa-eye toggle-pwd" onclick="togglePassword('reg-pwd-conf')"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Criar Conta <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <p>Ao continuar, você concorda com nossos <br> <a asp-controller="Account" asp-action="Termos">Termos de Uso e Privacidade</a>
+        </div>
+    </div>
+
+    <!-- JavaScript para a interatividade -->
+    <script>
+            function switchTab(tab) {
+                const formLogin = document.getElementById('form-login');
+                const formSignup = document.getElementById('form-signup');
+                const btnLogin = document.getElementById('btn-login');
+                const btnSignup = document.getElementById('btn-signup');
+
+                if (tab === 'login') {
+                    formLogin.style.display = 'block';
+                    formSignup.style.display = 'none';
+                    btnLogin.classList.add('active');
+                    btnSignup.classList.remove('active');
+                } else {
+                    formLogin.style.display = 'none';
+                    formSignup.style.display = 'block';
+                    btnSignup.classList.add('active');
+                    btnLogin.classList.remove('active');
+                }
+            }
+
+            function togglePassword(inputId) {
+                const input = document.getElementById(inputId);
+                if (input.type === "password") {
+                    input.type = "text";
+                } else {
+                    input.type = "password";
+                }
+            }
+    </script>
+</body>
+</html>
