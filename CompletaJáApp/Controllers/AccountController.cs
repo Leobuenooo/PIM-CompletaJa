@@ -21,8 +21,8 @@ namespace CompletaJáApp.Controllers
                 return View("Index");
             }
 
-            // Simulação para o PIM
-            if (Email == "aluno@unip.br" && Senha == "pim2026")
+            // Simulação 
+            if (Email.Trim().ToLower() == "aluno@unip.br" && Senha == "pim2026")
             {
                 return RedirectToAction("Index", "Home");
             }

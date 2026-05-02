@@ -1,29 +1,34 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. ADICIONANDO OS SERVIÇOS
 builder.Services.AddControllersWithViews();
+
+// Habilita a memória (Sessão) para o nosso sistema de Login
+builder.Services.AddSession();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 2. CONFIGURANDO O COMPORTAMENTO DO SITE
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
+
+// Ativa a Sessão de fato (Aviso: tem que ficar exatamente aqui!)
+app.UseSession();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
+// 3. CONFIGURANDO A TELA INICIAL
+// Mudamos aqui para o site abrir direto no Account (Login) ao invés do Home
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Account}/{action=Index}/{id?}");
 
 app.Run();

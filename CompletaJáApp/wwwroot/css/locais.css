@@ -1,0 +1,182 @@
+﻿/* Estilos Gerais - Tela de Locais */
+.local-content {
+    padding-top: 20px;
+}
+
+.local-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 5px;
+}
+
+.local-header p {
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 20px;
+}
+
+/* Botões */
+.btn-add-local {
+    width: 100%;
+    background-color: #1D58E6;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .btn-add-local:hover {
+        background-color: #1545B8;
+        transform: scale(1.02);
+    }
+
+/* Barra de Busca */
+.search-container {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    padding: 12px 15px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    gap: 10px;
+}
+
+    .search-container i {
+        color: #9CA3AF;
+    }
+
+    .search-container input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+    }
+
+/* Grid e Cards */
+.local-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-bottom: 50px;
+}
+
+.local-card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #F3F4F6;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .local-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+/* Imagens e Detalhes do Local */
+.local-img {
+    width: 100%;
+    height: 160px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.local-details {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .local-details h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        color: #111;
+    }
+
+.local-cnpj {
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.local-area {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1D58E6;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.users-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #F9FAFB;
+    border: 1px solid #F3F4F6;
+    color: #4B5563;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    align-self: flex-start;
+}
+
+/* Responsividade Desktop */
+@media (min-width: 768px) {
+    .local-content {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .local-header {
+        grid-column: 1;
+        grid-row: 1;
+        margin-bottom: 0;
+    }
+
+    .btn-add-local {
+        grid-column: 2;
+        grid-row: 1;
+        width: 220px;
+        margin-bottom: 0;
+    }
+
+    .search-container {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-bottom: 20px;
+    }
+
+    .local-list {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .local-card {
+        max-width: 380px;
+        margin: 0 auto;
+        width: 100%;
+    }
+}

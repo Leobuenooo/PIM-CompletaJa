@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meus Álbuns - CompletaJá</title>
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/albuns.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="top-header">
+            <div class="user-info">
+                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <span class="logo-text">CompletaJá</span>
+            </div>
+            <div class="header-actions">
+                <i class="fa-regular fa-bell icon-bell"></i>
+            </div>
+        </header>
+
+        <main class="content album-content">
+            <div class="album-header">
+                <h2>Meus Álbuns</h2>
+                <p>Gerencie suas coleções ativas</p>
+            </div>
+
+            <button class="btn-add-album">
+                <i class="fa-solid fa-circle-plus"></i> Adicionar Álbum
+            </button>
+
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar coleções...">
+            </div>
+
+            <div class="album-list">
+                <div class="album-card">
+                    <img src="~/images/Copa26.jpg" class="album-img" alt="Copa 2026">
+                    <div class="album-details">
+                        <span class="badge badge-popular">POPULAR</span>
+                        <h3>Copa do Mundo 2026</h3>
+                        <div class="album-count">
+                            <i class="fa-regular fa-bell"></i> 450/600 figurinhas
+                        </div>
+                        <div class="prog-info">
+                            <span>Progresso</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="prog-bg">
+                            <div class="prog-fill" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="album-card">
+                    <img src="~/images/marvel_logo.jpg" class="album-img" alt="Marvel Heroes">
+                    <div class="album-details">
+                        <span class="badge badge-ativa">COLEÇÃO ATIVA</span>
+                        <h3>Marvel: Heroes</h3>
+                        <div class="album-count">
+                            <i class="fa-regular fa-bell"></i> 60/200 figurinhas
+                        </div>
+                        <div class="prog-info">
+                            <span>Progresso</span>
+                            <span>30%</span>
+                        </div>
+                        <div class="prog-bg">
+                            <div class="prog-fill" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="/Home" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="/Album" class="nav-item active">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Álbuns</span>
+            </a>
+            <a href="/Locais" class="nav-item">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Locais</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-comments"></i>
+                <span>Trocas</span>
+            </a>
+        </nav>
+    </div>
+
+</body>
+</html>

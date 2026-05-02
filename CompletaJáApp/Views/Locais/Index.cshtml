@@ -1,0 +1,91 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meus Locais - CompletaJá</title>
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/locais.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="top-header">
+            <div class="user-info">
+                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <span class="logo-text">CompletaJá</span>
+            </div>
+            <div class="header-actions">
+                <i class="fa-regular fa-bell icon-bell"></i>
+            </div>
+        </header>
+
+        <main class="content local-content">
+            <div class="local-header">
+                <h2>Meus Locais</h2>
+                <p>Gerencie seus Locais</p>
+            </div>
+            <button class="btn-add-local">
+                <i class="fa-solid fa-circle-plus"></i> Adicionar Local
+            </button>
+
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar local...">
+            </div>
+
+            <div class="local-list">
+                
+                <div class="local-card">
+                    <img src="~/images/BancaJornal.jpg" class="local-img" alt="Banca do João">
+                    <div class="local-details">
+                        <h3>Banca do João</h3>
+                        <span class="local-cnpj">CNPJ: 12.345.678/0001-90</span>
+                        <span class="local-area">Área de Troca: Em frente a Banca</span>
+                        <div class="users-badge">
+                            <i class="fa-solid fa-circle-info"></i> Usuários Vinculados: 20
+                        </div>
+                    </div>
+                </div>
+
+                <div class="local-card">
+                    <img src="~/images/Shopping.jpg" class="local-img" alt="Shopping União de Osasco">
+                    <div class="local-details">
+                        <h3>Shopping União de Osasco</h3>
+                        <span class="local-cnpj">CNPJ: 10.255.108/0001-89</span>
+                        <span class="local-area">Área de Troca: Praça de Alimentação</span>
+                        <div class="users-badge">
+                            <i class="fa-solid fa-circle-info"></i> Usuários Vinculados: 67
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="/Home" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="/Album" class="nav-item">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Álbuns</span>
+            </a>
+            <a href="/Locais" class="nav-item active">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Locais</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-comments"></i>
+                <span>Trocas</span>
+            </a>
+        </nav>
+    </div>
+
+</body>
+</html>

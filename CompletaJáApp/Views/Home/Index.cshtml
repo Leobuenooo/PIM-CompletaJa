@@ -1,8 +1,124 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home - CompletaJá";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/home.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="top-header">
+            <div class="user-info">
+                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <span class="logo-text">CompletaJá</span>
+            </div>
+            <div class="header-actions">
+                <a asp-controller="Home" asp-action="Sair" class="btn-sair">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
+                </a>
+                <i class="fa-regular fa-bell icon-bell"></i>
+            </div>
+        </header>
+
+        <main class="content">
+            <h1 class="welcome-text">Olá,<br>Colecionador!</h1>
+
+            <div class="stats-row">
+                <div class="stat-card blue-card">
+                    <span class="stat-number">42</span>
+                    <span class="stat-label">REPETIDAS</span>
+                </div>
+                <div class="stat-card white-card">
+                    <span class="stat-number red-text">18</span>
+                    <span class="stat-label">FALTANTES</span>
+                </div>
+            </div>
+
+            <div class="shortcuts">
+                <h3>Atalhos</h3>
+                
+                <a href="/Album" class="main-shortcut" style="text-decoration: none;">
+                    <div class="shortcut-info">
+                        <strong>Meus Álbuns</strong>
+                        <span>Gerencie suas coleções</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+
+                <div class="secondary-shortcuts">
+                    <a href="/Locais" class="short-box yellow-box" style="text-decoration: none;">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div class="inner-text">
+                            <strong>Gerenciar Locais</strong>
+                        </div>
+                    </a>
+                    <div class="short-box light-blue-box">
+                        <i class="fa-solid fa-handshake"></i>
+                        <div class="inner-text">
+                            <strong>Encontrar Trocas</strong>
+                            <small>Matches automáticos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="matches">
+                <div class="section-header">
+                    <h3>Matches Recentes</h3>
+                    <a href="#">Ver todos</a>
+                </div>
+                <div class="matches-list">
+                    <div class="match-item">
+                        <div class="avatar-wrapper">
+                            <img src="https://i.pravatar.cc/150?u=marcos" alt="Marcos">
+                        </div>
+                        <strong>Marcos</strong>
+                        <span class="match-count">3 matches</span>
+                    </div>
+                    <div class="match-item">
+                        <div class="avatar-wrapper">
+                            <img src="https://i.pravatar.cc/150?u=juliana" alt="Juliana">
+                        </div>
+                        <strong>Juliana</strong>
+                        <span class="match-count">5 matches</span>
+                    </div>
+                    <div class="match-item">
+                        <div class="avatar-wrapper">
+                            <img src="https://i.pravatar.cc/150?u=ricardo" alt="Ricardo">
+                        </div>
+                        <strong>Ricardo</strong>
+                        <span class="match-count">2 matches</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="/Home" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="/Album" class="nav-item">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Álbuns</span>
+            </a>
+            <a href="/Locais" class="nav-item">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Locais</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-comments"></i>
+                <span>Trocas</span>
+            </a>
+        </nav>
+    </div>
+
+</body>
+</html>

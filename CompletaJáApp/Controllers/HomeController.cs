@@ -1,6 +1,4 @@
-using CompletaJáApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace CompletaJáApp.Controllers
 {
@@ -8,18 +6,20 @@ namespace CompletaJáApp.Controllers
     {
         public IActionResult Index()
         {
+            // COMENTADO TEMPORARIAMENTE PARA TESTES
+            // string usuario = HttpContext.Session.GetString("UsuarioLogado");
+            // if (string.IsNullOrEmpty(usuario))
+            // {
+            //     return RedirectToAction("Index", "Account");
+            // }
+
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Sair()
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Account");
         }
     }
 }
