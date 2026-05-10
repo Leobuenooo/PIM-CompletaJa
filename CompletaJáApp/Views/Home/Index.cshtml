@@ -1,8 +1,13 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@{
     ViewData["Title"] = "Home - CompletaJá";
     Layout = null;
-}
 
+    // Recupera os dados da Sessão ("Crachá" do usuário)
+    // Se por algum motivo a sessão estiver vazia, ele usa os valores padrão
+    var nomeUsuario = Context.Session.GetString("NomeUsuario") ?? "Colecionador";
+    var fotoUsuario = Context.Session.GetString("FotoUsuario") ?? "/images/default-avatar.png";
+}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -17,7 +22,7 @@
     <div class="app-container">
         <header class="top-header">
             <div class="user-info">
-                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <img src="@fotoUsuario" alt="Perfil" class="avatar-top" style="object-fit: cover;">
                 <span class="logo-text">CompletaJá</span>
             </div>
             <div class="header-actions">
@@ -29,7 +34,7 @@
         </header>
 
         <main class="content">
-            <h1 class="welcome-text">Olá,<br>Colecionador!</h1>
+            <h1 class="welcome-text">Olá,<br>@nomeUsuario!</h1>
 
             <div class="stats-row">
                 <div class="stat-card blue-card">
@@ -44,7 +49,7 @@
 
             <div class="shortcuts">
                 <h3>Atalhos</h3>
-                
+
                 <a href="/Album" class="main-shortcut" style="text-decoration: none;">
                     <div class="shortcut-info">
                         <strong>Meus Álbuns</strong>
@@ -118,18 +123,17 @@
                 <span>Trocas</span>
             </a>
         </nav>
-    </div> 
-
-<div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-        <div class="vw-plugin-top-wrapper"></div>
     </div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>
-    new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>
-
+    
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 </body>
 </html>
