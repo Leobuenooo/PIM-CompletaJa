@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<CompletaJaApp.Models.Album>
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -21,7 +22,7 @@
                 <a href="/Album" class="btn-back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <img src="@ViewBag.FotoUsuario" alt="Perfil" class="avatar-top" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                 <span class="logo-text">CompletaJá</span>
             </div>
         </header>
@@ -36,48 +37,26 @@
                         <input type="text" placeholder="Buscar álbuns na plataforma...">
                     </div>
 
-                    <span class="section-label">Sugestões Populares</span>
+                    <span class="section-label">Sugestões (Recentes)</span>
                     
                     <div class="suggestions-grid">
-                        <div class="suggestion-card" onclick="preencher('Copa do Mundo 2026', 'Esportes', 980)">
-                            <img src="~/images/Copa26.jpg" class="album-img" alt="Copa 2026">
-                            <div class="suggestion-info">
-                                <h4>Copa do Mundo 2026</h4>
-                                <span>Esportes</span>
-                            </div>
-                        </div>
-
-                        <div class="suggestion-card" onclick="preencher('Brasileirão 2026', 'Esportes', 640)">
-                            <img src="~/images/brasileirao.png" class="album-img" alt="Brasileirao 2026">
-                            <div class="suggestion-info">
-                                <h4>Brasileirão 2026</h4>
-                                <span>Esportes</span>
-                            </div>
-                        </div>
-
-                        <div class="suggestion-card" onclick="preencher('Champions League 2026', 'Esportes', 520)">
-                            <img src="~/images/Champions.png" class="album-img" alt="Champions League 2026">
-                            <div class="suggestion-info">
-                                <h4>Champions League 2026</h4>
-                                <span>Esportes</span>
-                            </div>
-                        </div>
-
-                        <div class="suggestion-card" onclick="preencher('Pokémon', 'Jogos', 250)">
-                            <img src="~/images/pokemon.png" class="album-img" alt="Pokemon">
-                            <div class="suggestion-info">
-                                <h4>Pokémon</h4>
-                                <span>Jogos</span>
-                            </div>
-                        </div>
-
-                        <div class="suggestion-card" onclick="preencher('Anime Stars', 'Animação', 180)">
-                            <img src="~/images/stars.jpg" class="album-img" alt="Anime Stars">
-                            <div class="suggestion-info">
-                                <h4>Anime Stars</h4>
-                                <span>Animação & Animes</span>
-                            </div>
-                        </div>
+                        @if (!Model.Any())
+                        {
+                            <p style="color: #6b7280; font-size: 0.9rem; padding: 10px;">Nenhum álbum na plataforma ainda.</p>
+                        }
+                        else
+                        {
+                            @foreach (var sug in Model)
+                            {
+                                <div class="suggestion-card" onclick="preencher('@sug.Nome', '', @sug.QuantidadeTotalFigurinhas)">
+                                    <img src="@sug.CapaUrl" class="album-img" alt="@sug.Nome">
+                                    <div class="suggestion-info">
+                                        <h4>@sug.Nome</h4>
+                                        <span>@sug.QuantidadeTotalFigurinhas figurinhas</span>
+                                    </div>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
 
@@ -89,10 +68,16 @@
                         <p>Personalize sua própria coleção agora</p>
                     </div>
 
-                    <form method="post" action="/Album/Criar">
-                        <div class="upload-placeholder">
-                            <i class="fa-solid fa-camera-retro"></i>
-                            <span>Adicionar Capa</span>
+                    <form id="formCriarAlbum" method="post" action="/Album/Criar" enctype="multipart/form-data">
+                        <div class="upload-placeholder" onclick="document.getElementById('inputCapa').click()" style="cursor: pointer; position: relative; overflow: hidden;">
+                            <img id="previewCapa" src="" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;" />
+                            
+                            <div id="uploadContent" style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%;">
+                                <i class="fa-solid fa-camera-retro"></i>
+                                <span>Adicionar Capa</span>
+                            </div>
+                            
+                            <input type="file" id="inputCapa" name="Capa" accept="image/*" style="display: none;" />
                         </div>
 
                         <div class="form-group">
@@ -149,29 +134,70 @@
 
     <script>
             function preencher(nome, categoria, qtd) {
-                // Referência dos campos
                 const campoNome = document.getElementById('inputNome');
                 const campoCategoria = document.getElementById('selectCategoria');
                 const campoQtd = document.getElementById('inputQtd');
 
-                // Atribuição dos valores
                 campoNome.value = nome;
-                campoCategoria.value = categoria;
+            
+                // Se a categoria vier vazia (sugestão), volta para a opção default para o usuário escolher
+                if(categoria !== '') {
+                    campoCategoria.value = categoria;
+                } else {
+                    campoCategoria.value = "";
+                }
+            
                 campoQtd.value = qtd;
 
-                // Feedback visual: destaca os campos brevemente
                 [campoNome, campoCategoria, campoQtd].forEach(el => {
                     el.style.transition = "background-color 0.3s";
-                    el.style.backgroundColor = "#eef2ff"; // Azul bem clarinho
+                    el.style.backgroundColor = "#eef2ff";
                     el.style.borderColor = "#1D58E6";
-                
+        
                     setTimeout(() => {
                         el.style.backgroundColor = "#fff";
                         el.style.borderColor = "#E5E7EB";
                     }, 600);
                 });
             }
-    </script>
 
+            document.getElementById('inputCapa').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    const preview = document.getElementById('previewCapa');
+                    preview.src = url;
+                    preview.style.display = 'block';
+                    document.getElementById('uploadContent').style.display = 'none';
+                }
+            });
+
+            document.getElementById('formCriarAlbum').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const nome = document.getElementById('inputNome').value;
+                const qtd = document.getElementById('inputQtd').value;
+                const categoria = document.getElementById('selectCategoria').value;
+                const capa = document.getElementById('inputCapa').files.length;
+
+                if (!nome || !qtd || !categoria || capa === 0) {
+                    alert("O cadastro não pode ser efetuado. Por favor, preencha todos os campos e adicione a capa do álbum.");
+                    return;
+                }
+
+                const response = await fetch(`/Album/VerificarDuplicidade?nome=${encodeURIComponent(nome)}&quantidade=${qtd}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.duplicado) {
+                    const prosseguir = confirm(`Atenção: Um álbum semelhante chamado "${data.nomeSemelhante}" com exatas ${qtd} figurinhas já existe no sistema. Deseja confirmar o cadastro do seu novo álbum mesmo assim?`);
+            
+                    if (!prosseguir) {
+                        return;
+                    }
+                }
+
+                this.submit();
+            });
+    </script>
 </body>
 </html>
