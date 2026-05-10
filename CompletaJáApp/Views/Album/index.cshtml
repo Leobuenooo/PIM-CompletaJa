@@ -26,13 +26,13 @@
 
         <main class="content album-content">
             <div class="album-header">
-                <h2>Meus Álbuns</h2>
+                <h2>Meus Álbuns</h2> 
                 <p>Gerencie suas coleções ativas</p>
             </div>
 
-            <button class="btn-add-album">
+            <a href="/Album/Add" class="btn-add-album" style="text-decoration:none;">
                 <i class="fa-solid fa-circle-plus"></i> Adicionar Álbum
-            </button>
+            </a>
 
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -97,6 +97,17 @@
             </a>
         </nav>
     </div>
+    
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 
 </body>
 </html>

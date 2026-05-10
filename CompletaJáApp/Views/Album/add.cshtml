@@ -1,0 +1,177 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adicionar Álbum - CompletaJá</title>
+    
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/album-add.css" asp-append-version="true" />
+    <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <header class="top-header">
+            <div class="user-info">
+                <a href="/Album" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <span class="logo-text">CompletaJá</span>
+            </div>
+        </header>
+
+        <main class="content add-album-content">
+            
+            <div class="add-album-card">
+                
+                <div class="card-left">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Buscar álbuns na plataforma...">
+                    </div>
+
+                    <span class="section-label">Sugestões Populares</span>
+                    
+                    <div class="suggestions-grid">
+                        <div class="suggestion-card" onclick="preencher('Copa do Mundo 2026', 'Esportes', 980)">
+                            <img src="~/images/Copa26.jpg" class="album-img" alt="Copa 2026">
+                            <div class="suggestion-info">
+                                <h4>Copa do Mundo 2026</h4>
+                                <span>Esportes</span>
+                            </div>
+                        </div>
+
+                        <div class="suggestion-card" onclick="preencher('Brasileirão 2026', 'Esportes', 640)">
+                            <img src="~/images/brasileirao.png" class="album-img" alt="Brasileirao 2026">
+                            <div class="suggestion-info">
+                                <h4>Brasileirão 2026</h4>
+                                <span>Esportes</span>
+                            </div>
+                        </div>
+
+                        <div class="suggestion-card" onclick="preencher('Champions League 2026', 'Esportes', 520)">
+                            <img src="~/images/Champions.png" class="album-img" alt="Champions League 2026">
+                            <div class="suggestion-info">
+                                <h4>Champions League 2026</h4>
+                                <span>Esportes</span>
+                            </div>
+                        </div>
+
+                        <div class="suggestion-card" onclick="preencher('Pokémon', 'Jogos', 250)">
+                            <img src="~/images/pokemon.png" class="album-img" alt="Pokemon">
+                            <div class="suggestion-info">
+                                <h4>Pokémon</h4>
+                                <span>Jogos</span>
+                            </div>
+                        </div>
+
+                        <div class="suggestion-card" onclick="preencher('Anime Stars', 'Animação', 180)">
+                            <img src="~/images/stars.jpg" class="album-img" alt="Anime Stars">
+                            <div class="suggestion-info">
+                                <h4>Anime Stars</h4>
+                                <span>Animação & Animes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-divider"></div>
+
+                <div class="card-right">
+                    <div class="create-header">
+                        <h3>Crie um novo</h3>
+                        <p>Personalize sua própria coleção agora</p>
+                    </div>
+
+                    <form method="post" action="/Album/Criar">
+                        <div class="upload-placeholder">
+                            <i class="fa-solid fa-camera-retro"></i>
+                            <span>Adicionar Capa</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nome do Álbum</label>
+                            <input type="text" id="inputNome" name="Nome" required placeholder="Ex: Minha Coleção de Verão">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="selectCategoria" name="Categoria" required>
+                                <option value="" disabled selected>Selecione um tema...</option>
+                                <option value="Esportes">Esportes</option>
+                                <option value="Animação">Animação & Animes</option>
+                                <option value="Filmes">Filmes & Séries</option>
+                                <option value="Jogos">Jogos</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Quantidade de Figurinhas</label>
+                            <input type="number" id="inputQtd" name="TotalFigurinhas" required placeholder="0">
+                        </div>
+
+                        <button type="submit" class="btn-add-album">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Criar Coleção
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+            
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="/Home" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="/Album" class="nav-item active">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Álbuns</span>
+            </a>
+            <a href="/Locais" class="nav-item">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Locais</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-comments"></i>
+                <span>Trocas</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+            function preencher(nome, categoria, qtd) {
+                // Referência dos campos
+                const campoNome = document.getElementById('inputNome');
+                const campoCategoria = document.getElementById('selectCategoria');
+                const campoQtd = document.getElementById('inputQtd');
+
+                // Atribuição dos valores
+                campoNome.value = nome;
+                campoCategoria.value = categoria;
+                campoQtd.value = qtd;
+
+                // Feedback visual: destaca os campos brevemente
+                [campoNome, campoCategoria, campoQtd].forEach(el => {
+                    el.style.transition = "background-color 0.3s";
+                    el.style.backgroundColor = "#eef2ff"; // Azul bem clarinho
+                    el.style.borderColor = "#1D58E6";
+                
+                    setTimeout(() => {
+                        el.style.backgroundColor = "#fff";
+                        el.style.borderColor = "#E5E7EB";
+                    }, 600);
+                });
+            }
+    </script>
+
+</body>
+</html>
