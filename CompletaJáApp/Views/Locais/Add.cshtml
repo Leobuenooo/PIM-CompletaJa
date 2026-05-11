@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Adicionar Local - CompletaJá</title>
     
-    <link rel="stylesheet" href="/css/home.css" />
-    <link rel="stylesheet" href="/css/add-local.css" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/add-local.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
@@ -42,24 +42,25 @@
                     <span class="section-label">Pontos de Troca Famosos</span>
                     
                     <div class="suggestions-grid">
+                        
                         <div class="suggestion-card" onclick="preencherLocal('Banca Central', 'Banca', '12.345.678/0001-99')">
-                            <div class="icon-box"><i class="fa-solid fa-store"></i></div>
+                            <img src="~/images/banca2.jpg" alt="Banca Central" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
                             <div class="suggestion-info">
                                 <h4>Banca Central</h4>
                                 <span>Banca de Jornal</span>
                             </div>
                         </div>
 
-                        <div class="suggestion-card" onclick="preencherLocal('Shopping Iguatemi SP', 'Shopping', '151.218.147/0001-93')">
-                            <div class="icon-box" style="background-color: #fce7f3; color: #db2777;"><i class="fa-solid fa-bag-shopping"></i></div>
+                        <div class="suggestion-card" onclick="preencherLocal('Shopping Iguatemi', 'Shopping', '98.765.432/0001-11')">
+                            <img src="~/images/shopping.jpg" alt="Shopping Iguatemi" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
                             <div class="suggestion-info">
-                                <h4>Shopping Iguatemi SP</h4>
+                                <h4>Shopping Iguatemi</h4>
                                 <span>Shopping Center</span>
                             </div>
                         </div>
 
                         <div class="suggestion-card" onclick="preencherLocal('Loja de Conveniência', 'Loja', '11.222.333/0001-44')">
-                            <div class="icon-box" style="background-color: #dcfce7; color: #16a34a;"><i class="fa-solid fa-basket-shopping"></i></div>
+                            <img src="~/images/conveniencia.jpeg" alt="Loja de Conveniência" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
                             <div class="suggestion-info">
                                 <h4>Loja de Conveniência</h4>
                                 <span>Loja Comercial</span>
@@ -67,12 +68,13 @@
                         </div>
 
                         <div class="suggestion-card" onclick="preencherLocal('Livraria Cultura', 'Livraria', '55.666.777/0001-88')">
-                            <div class="icon-box" style="background-color: #fef9c3; color: #ca8a04;"><i class="fa-solid fa-book"></i></div>
+                            <img src="~/images/LivrariaCultura.jpg" alt="Livraria Cultura" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
                             <div class="suggestion-info">
                                 <h4>Livraria Cultura</h4>
                                 <span>Livraria</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -84,11 +86,13 @@
                         <p>Ajude outros colecionadores a acharem este local</p>
                     </div>
 
-                    <form method="post" action="/Locais/Criar">
-                        <div class="upload-placeholder">
-                            <i class="fa-solid fa-map-location-dot"></i>
-                            <span>Foto do Local<br>(Opcional)</span>
-                        </div>
+                    <form method="post" action="/Locais/Criar" enctype="multipart/form-data">
+                        
+                        <label class="upload-placeholder" style="cursor: pointer;">
+                            <input type="file" name="Foto" accept="image/*" required style="display: none;" />
+                            <i class="fa-solid fa-camera-retro"></i>
+                            <span>Adicionar Foto<br>(Obrigatório)</span>
+                        </label>
 
                         <div class="form-group">
                             <label>Nome do Ponto de Troca</label>
@@ -152,7 +156,6 @@
                 campoTipo.value = tipo;
                 campoCNPJ.value = cnpj;
 
-                // Efeito visual de preenchimento
                 [campoNome, campoTipo, campoCNPJ].forEach(el => {
                     el.style.transition = "background-color 0.3s";
                     el.style.backgroundColor = "#eef2ff";

@@ -89,11 +89,14 @@
                         <p>Personalize sua própria coleção agora</p>
                     </div>
 
-                    <form method="post" action="/Album/Criar">
-                        <div class="upload-placeholder">
+                  
+                    <form method="post" action="/Locais/Criar" enctype="multipart/form-data">
+                        
+                        <label class="upload-placeholder" style="cursor: pointer;">
+                            <input type="file" name="Foto" accept="image/*" required style="display: none;" />
                             <i class="fa-solid fa-camera-retro"></i>
-                            <span>Adicionar Capa</span>
-                        </div>
+                            <span>Adicionar Capa<br>(Obrigatório)</span>
+                        </label>
 
                         <div class="form-group">
                             <label>Nome do Álbum</label>
