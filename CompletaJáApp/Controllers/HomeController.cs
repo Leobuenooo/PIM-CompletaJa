@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompletaJáApp.Controllers
@@ -6,12 +7,12 @@ namespace CompletaJáApp.Controllers
     {
         public IActionResult Index()
         {
-            // COMENTADO TEMPORARIAMENTE PARA TESTES
-            // string usuario = HttpContext.Session.GetString("UsuarioLogado");
-            // if (string.IsNullOrEmpty(usuario))
-            // {
-            //     return RedirectToAction("Index", "Account");
-            // }
+            string usuario = HttpContext.Session.GetString("NomeUsuario");
+
+            if (string.IsNullOrEmpty(usuario))
+            {
+                return RedirectToAction("Index", "Account");
+            }
 
             return View();
         }

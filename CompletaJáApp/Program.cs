@@ -1,7 +1,15 @@
+// Importando as pastas que precisamos (coloque no topo do arquivo)
+using Microsoft.EntityFrameworkCore;
+using CompletaJaApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. ADICIONANDO OS SERVIÇOS
 builder.Services.AddControllersWithViews();
+
+// Configurando a conexão com o Banco de Dados SQL Server
+builder.Services.AddDbContext<CompletaJaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Habilita a memória (Sessão) para o nosso sistema de Login
 builder.Services.AddSession();

@@ -69,7 +69,7 @@
             </form>
 
             <!-- Formulário de CRIAR CONTA (Oculto por padrão) -->
-            <form id="form-signup" asp-controller="Account" asp-action="Register" method="post" style="display: none;">
+            <form id="form-signup" asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data" onsubmit="return validarFormularioCadastro()" style="display: none;">
                 <div class="input-group">
                     <label>Nome ou Apelido</label>
                     <div class="input-field">
@@ -83,6 +83,21 @@
                     <div class="input-field">
                         <i class="fa-regular fa-envelope"></i>
                         <input type="email" name="Email" placeholder="seu@email.com" required />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>CPF</label>
+                    <div class="input-field">
+                        <i class="fa-regular fa-id-card"></i> <input type="text" name="CPF" placeholder="000.000.000-00" maxlength="14" required />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Foto de Perfil (Opcional)</label>
+                    <div class="input-field">
+                        <i class="fa-regular fa-image"></i>
+                        <input type="file" name="FotoPerfil" accept="image/*" />
                     </div>
                 </div>
 
@@ -143,6 +158,49 @@
                 } else {
                     input.type = "password";
                 }
+            }
+
+            // 1. MÁSCARA DO CPF (Coloca os pontos e traço enquanto digita)
+            document.querySelector('input[name="CPF"]').addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+                if (value.length > 11) value = value.slice(0, 11); // Limita a 11 números
+
+                // Adiciona os pontos e o traço
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+                e.target.value = value;
+            });
+
+            // 2. VALIDAÇÃO MATEMÁTICA DO CPF
+            function validarCPF(cpf) {
+                cpf = cpf.replace(/[^\d]+/g, ''); // Remove pontos e traços para o cálculo
+                if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false; // Bloqueia 111.111.111-11
+
+                let soma = 0, resto;
+                for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+                resto = (soma * 10) % 11;
+                if ((resto == 10) || (resto == 11)) resto = 0;
+                if (resto != parseInt(cpf.substring(9, 10))) return false;
+
+                soma = 0;
+                for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+                resto = (soma * 10) % 11;
+                if ((resto == 10) || (resto == 11)) resto = 0;
+                if (resto != parseInt(cpf.substring(10, 11))) return false;
+
+                return true;
+            }
+
+            // 3. FUNÇÃO QUE BLOQUEIA O CADASTRO SE O CPF FOR INVÁLIDO
+            function validarFormularioCadastro() {
+                const cpfInput = document.querySelector('input[name="CPF"]').value;
+                if (!validarCPF(cpfInput)) {
+                    alert('O CPF digitado é inválido. Por favor, verifique.');
+                    return false; // Impede o formulário de ser enviado
+                }
+                return true; // Deixa o formulário passar para o C#
             }
     </script>
 

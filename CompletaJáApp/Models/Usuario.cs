@@ -16,16 +16,17 @@ namespace CompletaJaApp.Models
         [MaxLength(150)]
         public string Email { get; set; }
 
+        // Mudamos de 'Senha' para 'SenhaHash' para bater com o SQL
         [Required(ErrorMessage = "A senha é obrigatória.")]
         [MaxLength(255)]
-        public string Senha { get; set; }
+        public string SenhaHash { get; set; }
 
         [Required(ErrorMessage = "O CPF é obrigatório.")]
         [MaxLength(14)]
         public string CPF { get; set; }
 
-        // Novamente, guardamos apenas o caminho (endereço) da foto de perfil!
+        // Mudamos de 'FotoPerfilUrl' para 'FotoUrl' para bater com o SQL
         [MaxLength(500)]
-        public string FotoPerfilUrl { get; set; }
+        public string FotoUrl { get; set; }
     }
 }

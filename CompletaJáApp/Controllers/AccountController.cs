@@ -1,17 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using CompletaJaApp.Data;
+using CompletaJaApp.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http; // ADICIONADO: Necessário para usar Session
 
 namespace CompletaJáApp.Controllers
 {
     public class AccountController : Controller
     {
-        // 1. TELA INICIAL (Login / Cadastro)
+        private readonly CompletaJaContext _context;
+        private readonly IWebHostEnvironment _env;
+
+        public AccountController(CompletaJaContext context, IWebHostEnvironment env)
+        {
+            _context = context;
+            _env = env;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        // 2. RECEBE OS DADOS DE LOGIN
+        // 3. RECEBE OS DADOS DE LOGIN (Atualizado com Sessão)
         [HttpPost]
         public IActionResult Login(string Email, string Senha)
         {
@@ -21,9 +34,16 @@ namespace CompletaJáApp.Controllers
                 return View("Index");
             }
 
-            // Simulação 
-            if (Email.Trim().ToLower() == "aluno@unip.br" && Senha == "pim2026")
+            var usuario = _context.Usuarios
+                .FirstOrDefault(u => u.Email == Email && u.SenhaHash == Senha);
+
+            if (usuario != null)
             {
+                // --- AQUI ESTÁ A ALTERAÇÃO ---
+                // Guardamos o Nome e o caminho da Foto na Sessão para usar na Home
+                HttpContext.Session.SetString("NomeUsuario", usuario.Nome);
+                HttpContext.Session.SetString("FotoUsuario", usuario.FotoUrl);
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -31,9 +51,8 @@ namespace CompletaJáApp.Controllers
             return View("Index");
         }
 
-        // 3. RECEBE OS DADOS DE CRIAR CONTA
         [HttpPost]
-        public IActionResult Register(string Nome, string Email, string Senha, string ConfirmaSenha)
+        public async Task<IActionResult> Register(string Nome, string Email, string CPF, string Senha, string ConfirmaSenha, IFormFile FotoPerfil)
         {
             if (Senha != ConfirmaSenha)
             {
@@ -41,24 +60,58 @@ namespace CompletaJáApp.Controllers
                 return View("Index");
             }
 
+            var emailJaExiste = _context.Usuarios.Any(u => u.Email == Email);
+            if (emailJaExiste)
+            {
+                ViewBag.Erro = "Este e-mail já está em uso.";
+                return View("Index");
+            }
+
+            string fotoUrl = "/images/default-avatar.png";
+
+            if (FotoPerfil != null && FotoPerfil.Length > 0)
+            {
+                string nomeArquivo = Guid.NewGuid().ToString() + "_" + Path.GetFileName(FotoPerfil.FileName);
+                string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "usuarios");
+
+                if (!Directory.Exists(caminhoPasta))
+                {
+                    Directory.CreateDirectory(caminhoPasta);
+                }
+
+                string caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
+
+                using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
+                {
+                    await FotoPerfil.CopyToAsync(stream);
+                }
+
+                fotoUrl = "/images/usuarios/" + nomeArquivo;
+            }
+
+            var novoUsuario = new Usuario
+            {
+                Nome = Nome,
+                Email = Email,
+                CPF = CPF,
+                SenhaHash = Senha,
+                FotoUrl = fotoUrl
+            };
+
+            _context.Usuarios.Add(novoUsuario);
+            _context.SaveChanges();
+
+            TempData["Sucesso"] = "Conta criada com sucesso! Faça seu login.";
             return RedirectToAction("Index", "Account");
         }
 
-        // 4. TELA DE TERMOS DE USO
+        // Métodos de apoio (Termos, Esqueci Senha) permanecem iguais...
         [HttpGet]
-        public IActionResult Termos()
-        {
-            return View();
-        }
+        public IActionResult Termos() => View();
 
-        // 5. TELA DE ESQUECEU A SENHA (GET - Abrir a tela)
         [HttpGet]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+        public IActionResult ForgotPassword() => View();
 
-        // 6. TELA DE ESQUECEU A SENHA (POST - Enviar o formulário)
         [HttpPost]
         public IActionResult ForgotPassword(string Email)
         {
@@ -67,7 +120,6 @@ namespace CompletaJáApp.Controllers
                 ViewBag.Erro = "Por favor, informe seu e-mail.";
                 return View();
             }
-
             ViewBag.Sucesso = $"Se o e-mail {Email} estiver cadastrado, enviaremos um link de recuperação.";
             return View();
         }

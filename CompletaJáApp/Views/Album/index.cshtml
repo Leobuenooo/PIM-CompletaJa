@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<CompletaJaApp.Models.Album>
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -16,7 +17,7 @@
     <div class="app-container">
         <header class="top-header">
             <div class="user-info">
-                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
+                <img src="@ViewBag.FotoUsuario" alt="Perfil" class="avatar-top" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                 <span class="logo-text">CompletaJá</span>
             </div>
             <div class="header-actions">
@@ -26,7 +27,7 @@
 
         <main class="content album-content">
             <div class="album-header">
-                <h2>Meus Álbuns</h2> 
+                <h2>Meus Álbuns</h2>
                 <p>Gerencie suas coleções ativas</p>
             </div>
 
@@ -40,41 +41,29 @@
             </div>
 
             <div class="album-list">
-                <div class="album-card">
-                    <img src="~/images/Copa26.jpg" class="album-img" alt="Copa 2026">
-                    <div class="album-details">
-                        <span class="badge badge-popular">POPULAR</span>
-                        <h3>Copa do Mundo 2026</h3>
-                        <div class="album-count">
-                            <i class="fa-regular fa-bell"></i> 450/600 figurinhas
-                        </div>
-                        <div class="prog-info">
-                            <span>Progresso</span>
-                            <span>75%</span>
-                        </div>
-                        <div class="prog-bg">
-                            <div class="prog-fill" style="width: 75%;"></div>
-                        </div>
+                @if (!Model.Any())
+                {
+                    <div style="text-align: center; color: #6b7280; margin-top: 30px;">
+                        <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 10px; color: #d1d5db;"></i>
+                        <p>Nenhum álbum cadastrado ainda.<br>Clique em "Adicionar Álbum" para começar!</p>
                     </div>
-                </div>
-
-                <div class="album-card">
-                    <img src="~/images/marvel_logo.jpg" class="album-img" alt="Marvel Heroes">
-                    <div class="album-details">
-                        <span class="badge badge-ativa">COLEÇÃO ATIVA</span>
-                        <h3>Marvel: Heroes</h3>
-                        <div class="album-count">
-                            <i class="fa-regular fa-bell"></i> 60/200 figurinhas
+                }
+                else
+                {
+                    @foreach (var album in Model)
+                    {
+                        <div class="album-card">
+                            <img src="@album.CapaUrl" class="album-img" alt="@album.Nome">
+                            <div class="album-details">
+                                <span class="badge badge-popular">SISTEMA</span>
+                                <h3>@album.Nome</h3>
+                                <div class="album-count">
+                                    <i class="fa-regular fa-clone"></i> Total de @album.QuantidadeTotalFigurinhas figurinhas
+                                </div>
+                            </div>
                         </div>
-                        <div class="prog-info">
-                            <span>Progresso</span>
-                            <span>30%</span>
-                        </div>
-                        <div class="prog-bg">
-                            <div class="prog-fill" style="width: 30%;"></div>
-                        </div>
-                    </div>
-                </div>
+                    }
+                }
             </div>
         </main>
 
