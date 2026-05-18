@@ -1,102 +1,154 @@
 ﻿@model IEnumerable<CompletaJaApp.Models.Album>
 @{
-    Layout = null;
+    ViewData["Title"] = "Meus Álbuns";
 }
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meus Álbuns - CompletaJá</title>
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+@section Styles {
     <link rel="stylesheet" href="~/css/albuns.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-</head>
-<body>
+    <style>
+        /* 1. Alinhamento de Cabeçalhos e Buscas */
+        .album-header {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
 
-    <div class="app-container">
-        <header class="top-header">
-            <div class="user-info">
-                <img src="@ViewBag.FotoUsuario" alt="Perfil" class="avatar-top" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                <span class="logo-text">CompletaJá</span>
-            </div>
-            <div class="header-actions">
-                <i class="fa-regular fa-bell icon-bell"></i>
-            </div>
-        </header>
+        .btn-add-album {
+            max-width: 320px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: center;
+        }
 
-        <main class="content album-content">
-            <div class="album-header">
-                <h2>Meus Álbuns</h2>
-                <p>Gerencie suas coleções ativas</p>
-            </div>
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 35px auto;
+            width: 100%;
+        }
 
-            <a href="/Album/Add" class="btn-add-album" style="text-decoration:none;">
-                <i class="fa-solid fa-circle-plus"></i> Adicionar Álbum
-            </a>
+        /* 2. A MÁGICA FLUIDA: Sistema Flexível que estica e quebra linhas automaticamente */
+        .album-list {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: stretch !important;
+            gap: 20px !important;
+            width: 100% !important;
+        }
 
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Buscar coleções...">
-            </div>
+        /* 3. Regras do Card: Cresce até 500px, base de 350px (Adapta a qualquer tela) */
+        .album-card {
+            flex: 1 1 350px !important;
+            max-width: 500px !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            box-sizing: border-box !important;
+            padding: 15px !important;
+            gap: 16px !important;
+            background: white !important;
+            border-radius: 16px !important;
+            border: 1px solid #E5E7EB !important;
+            text-decoration: none !important;
+            color: inherit !important;
+            transition: transform 0.2s !important;
+        }
 
-            <div class="album-list">
-                @if (!Model.Any())
+            .album-card:hover {
+                transform: translateY(-3px) !important;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+            }
+
+            .album-card .album-img {
+                width: 110px !important;
+                height: 110px !important;
+                object-fit: cover !important;
+                flex-shrink: 0 !important;
+                border-radius: 12px !important;
+            }
+
+            .album-card .album-details {
+                flex: 1 !important;
+                min-width: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 5px !important;
+                overflow: hidden !important;
+            }
+
+            .album-card h3 {
+                font-size: 1.15rem !important;
+                font-weight: 800 !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                line-height: 1.2 !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+            }
+    </style>
+}
+
+<main class="content album-content">
+    <div style="width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+
+        <div class="album-header">
+            <h2>Meus Álbuns</h2>
+            <p>Suas coleções ativas de figurinhas</p>
+        </div>
+
+        <a href="/Album/Buscar" class="btn-add-album" style="text-decoration:none;">
+            <i class="fa-solid fa-book-open"></i> Adicionar Novo Álbum
+        </a>
+
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="inputBuscaAlbum" placeholder="Filtrar meus álbuns..." onkeyup="filtrarAlbuns()">
+        </div>
+
+        <div class="album-list">
+            @if (!Model.Any())
+            {
+                <div style="flex: 1 1 100%; text-align: center; color: #6b7280; padding: 40px 20px;">
+                    <i class="fa-solid fa-book" style="font-size: 4rem; margin-bottom: 20px; color: #cbd5e1;"></i>
+                    <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 10px;">Nenhum álbum ativo</h3>
+                    <p style="font-size: 1rem; color: #64748b; max-width: 500px; margin: 0 auto;">
+                        Você ainda não está colecionando nada. Clique em <b>"Adicionar Novo Álbum"</b> para começar!
+                    </p>
+                </div>
+            }
+            else
+            {
+                @foreach (var album in Model)
                 {
-                    <div style="text-align: center; color: #6b7280; margin-top: 30px;">
-                        <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 10px; color: #d1d5db;"></i>
-                        <p>Nenhum álbum cadastrado ainda.<br>Clique em "Adicionar Álbum" para começar!</p>
-                    </div>
-                }
-                else
-                {
-                    @foreach (var album in Model)
-                    {
-                        <div class="album-card">
-                            <img src="@album.CapaUrl" class="album-img" alt="@album.Nome">
-                            <div class="album-details">
-                                <span class="badge badge-popular">SISTEMA</span>
-                                <h3>@album.Nome</h3>
-                                <div class="album-count">
-                                    <i class="fa-regular fa-clone"></i> Total de @album.QuantidadeTotalFigurinhas figurinhas
-                                </div>
+                    <a href="/Figurinha/Index?albumId=@album.Id" class="album-card">
+                        <img src="@album.CapaUrl" class="album-img" alt="@album.Nome">
+                        <div class="album-details">
+                            <span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 800;">COLEÇÃO ATIVA</span>
+                            <h3>@album.Nome</h3>
+                            <div style="font-size: 0.85rem; color: #64748b;">
+                                <i class="fa-regular fa-clone"></i> @album.QuantidadeTotalFigurinhas figurinhas
                             </div>
                         </div>
-                    }
+                    </a>
                 }
-            </div>
-        </main>
-
-        <nav class="bottom-nav">
-            <a href="/Home" class="nav-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </a>
-            <a href="/Album" class="nav-item active">
-                <i class="fa-solid fa-book-open"></i>
-                <span>Álbuns</span>
-            </a>
-            <a href="/Locais" class="nav-item">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>Locais</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fa-solid fa-comments"></i>
-                <span>Trocas</span>
-            </a>
-        </nav>
-    </div>
-    
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
+            }
         </div>
-    </div>
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
 
-</body>
-</html>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        function filtrarAlbuns() {
+            const termo = document.getElementById('inputBuscaAlbum').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.album-card');
+            cards.forEach(card => {
+                const titulo = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = titulo.includes(termo) ? 'flex' : 'none';
+            });
+        }
+    </script>
+}

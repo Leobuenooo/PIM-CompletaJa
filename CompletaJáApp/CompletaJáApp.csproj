@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\NovaPasta\**" />
     <Compile Remove="wwwroot\css\albuns.css\**" />
-    <Content Remove="Views\NovaPasta\**" />
     <Content Remove="wwwroot\css\albuns.css\**" />
-    <EmbeddedResource Remove="Views\NovaPasta\**" />
     <EmbeddedResource Remove="wwwroot\css\albuns.css\**" />
-    <None Remove="Views\NovaPasta\**" />
     <None Remove="wwwroot\css\albuns.css\**" />
   </ItemGroup>
 

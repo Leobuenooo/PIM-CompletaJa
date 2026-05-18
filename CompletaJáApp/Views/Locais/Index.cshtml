@@ -1,102 +1,148 @@
-﻿@{
-    Layout = null;
+﻿@model IEnumerable<CompletaJaApp.Models.Local>
+@{
+    ViewData["Title"] = "Meus Locais";
 }
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meus Locais - CompletaJá</title>
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+@section Styles {
     <link rel="stylesheet" href="~/css/locais.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-</head>
-<body>
+    <style>
+        .local-header {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
 
-    <div class="app-container">
-        <header class="top-header">
-            <div class="user-info">
-                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
-                <span class="logo-text">CompletaJá</span>
-            </div>
-            <div class="header-actions">
-                <i class="fa-regular fa-bell icon-bell"></i>
-            </div>
-        </header>
+        .btn-add-local {
+            max-width: 320px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: center;
+        }
 
-        <main class="content local-content">
-            <div class="local-header">
-                <h2>Meus Locais</h2>
-                <p>Gerencie seus Locais</p>
-            </div>
-            <button onclick="window.location.href='/Locais/Add'" class="btn-add-local">
-                <i class="fa-solid fa-circle-plus"></i> Adicionar Local
-            </button>
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 35px auto;
+            width: 100%;
+        }
 
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Buscar local...">
-            </div>
+        .local-list {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            gap: 20px !important;
+            width: 100% !important;
+        }
 
-            <div class="local-list">
-                
-                <div class="local-card">
-                    <img src="~/images/BancaJornal.jpg" class="local-img" alt="Banca do João">
-                    <div class="local-details">
-                        <h3>Banca do João</h3>
-                        <span class="local-cnpj">CNPJ: 12.345.678/0001-90</span>
-                        <span class="local-area">Área de Troca: Em frente a Banca</span>
-                        <div class="users-badge">
-                            <i class="fa-solid fa-circle-info"></i> Usuários Vinculados: 20
-                        </div>
-                    </div>
-                </div>
+        .local-card {
+            flex: 1 1 350px !important;
+            max-width: 500px !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            box-sizing: border-box !important;
+            padding: 15px !important;
+            gap: 16px !important;
+            background: white !important;
+            border-radius: 16px !important;
+            border: 1px solid #E5E7EB !important;
+            text-decoration: none !important;
+            color: inherit !important;
+            transition: transform 0.2s !important;
+        }
 
-                <div class="local-card">
-                    <img src="~/images/Shopping.jpg" class="local-img" alt="Shopping União de Osasco">
-                    <div class="local-details">
-                        <h3>Shopping União de Osasco</h3>
-                        <span class="local-cnpj">CNPJ: 10.255.108/0001-89</span>
-                        <span class="local-area">Área de Troca: Praça de Alimentação</span>
-                        <div class="users-badge">
-                            <i class="fa-solid fa-circle-info"></i> Usuários Vinculados: 67
-                        </div>
-                    </div>
-                </div>
+            .local-card:hover {
+                transform: translateY(-3px) !important;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+            }
 
-            </div>
-        </main>
+            .local-card .local-img {
+                width: 100px !important;
+                height: 100px !important;
+                object-fit: cover !important;
+                flex-shrink: 0 !important;
+                border-radius: 12px !important;
+            }
 
-        <nav class="bottom-nav">
-            <a href="/Home" class="nav-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </a>
-            <a href="/Album" class="nav-item">
-                <i class="fa-solid fa-book-open"></i>
-                <span>Álbuns</span>
-            </a>
-            <a href="/Locais" class="nav-item active">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>Locais</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fa-solid fa-comments"></i>
-                <span>Trocas</span>
-            </a>
-        </nav>
-    </div>
+            .local-card .local-details {
+                flex: 1 !important;
+                min-width: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 4px !important;
+                overflow: hidden !important;
+            }
 
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
+            .local-card h3 {
+                font-size: 1.15rem !important;
+                font-weight: 800 !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                line-height: 1.2 !important;
+            }
+
+            .local-card span, .local-card .users-badge {
+                font-size: 0.8rem !important;
+                color: #64748b !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                width: 100% !important;
+            }
+    </style>
+}
+
+<main class="content local-content">
+    <div style="width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+
+        <div class="local-header">
+            <h2>Meus Locais</h2>
+            <p>Pontos de encontro onde você realiza trocas</p>
         </div>
+
+        <button onclick="window.location.href='/Locais/Buscar'" class="btn-add-local">
+            <i class="fa-solid fa-magnifying-glass-location"></i> Adicionar Local
+        </button>
+
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="inputBuscaLocal" placeholder="Filtrar meus locais..." onkeyup="filtrarLocais()">
+        </div>
+
+        <div class="local-list">
+            @if (!Model.Any())
+            {
+                <div style="flex: 1 1 100%; text-align: center; color: #6b7280; padding: 40px 20px;">
+                    <i class="fa-solid fa-map-pinned" style="font-size: 4rem; margin-bottom: 20px; color: #cbd5e1;"></i>
+                    <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 10px;">Nenhum local vinculado</h3>
+                    <p style="font-size: 1rem; color: #64748b; max-width: 500px; margin: 0 auto;">
+                        Você não está vinculado a nenhum local. Clique em <b>"Adicionar Local"</b> para encontrar pontos ativos!
+                    </p>
+                </div>
+            }
+            else
+            {
+                @foreach (var local in Model)
+                {
+                    <a href="/Locais/Detalhes?id=@local.Id" class="local-card">
+                        <img src="@local.FotoUrl" class="local-img" alt="@local.Nome">
+                        <div class="local-details">
+                            <h3>@local.Nome</h3>
+                            <span class="local-cnpj">CNPJ: @local.CNPJ</span>
+                            <span class="local-area"><strong>Endereço:</strong> @local.Endereco</span>
+                            <span class="local-area"><strong>Área:</strong> @local.AreaTroca</span>
+                            <div class="users-badge" style="color: #1D58E6 !important; font-weight: 700 !important; margin-top: 4px !important;">
+                                <i class="fa-solid fa-circle-info"></i> @local.UsuariosVinculados Colecionadores
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+
     </div>
-    
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
-</body>
-</html>
+</main>
+
+@section Scripts {
+    <script src="~/js/locais-index.js" asp-append-version="true"></script>
+}

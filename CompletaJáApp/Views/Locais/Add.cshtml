@@ -1,183 +1,95 @@
 ﻿@{
-    Layout = null;
+    ViewData["Title"] = "Cadastrar Novo Local";
 }
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Adicionar Local - CompletaJá</title>
-    
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+@section Styles {
     <link rel="stylesheet" href="~/css/add-local.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-</head>
-<body>
+    <style>
+        .btn-back-content {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
 
-    <div class="app-container">
-        
-        <header class="top-header">
-            <div class="user-info">
-                <a href="/Locais" class="btn-back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                <img src="~/images/ALANZOKA.png" alt="Perfil" class="avatar-top">
-                <span class="logo-text">CompletaJá</span>
-            </div>
-            <div class="header-actions">
-                <i class="fa-regular fa-bell icon-bell"></i>
-            </div>
-        </header>
+        .container-cadastro-central {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid #f1f5f9;
+        }
+    </style>
+}
 
-        <main class="content add-local-content">
-            
-            <div class="add-local-card">
-                
-                <div class="card-left">
-                    <div class="search-container">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Buscar locais na cidade...">
-                    </div>
+<main class="content add-local-content">
 
-                    <span class="section-label">Pontos de Troca Famosos</span>
-                    
-                    <div class="suggestions-grid">
-                        
-                        <div class="suggestion-card" onclick="preencherLocal('Banca Central', 'Banca', '12.345.678/0001-99')">
-                            <img src="~/images/banca.jpg" alt="Banca Central" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
-                            <div class="suggestion-info">
-                                <h4>Banca Central</h4>
-                                <span>Banca de Jornal</span>
-                            </div>
-                        </div>
+    <a href="/Locais/Buscar" class="btn-back-content">
+        <i class="fa-solid fa-arrow-left"></i> Voltar para a Busca
+    </a>
 
-                        <div class="suggestion-card" onclick="preencherLocal('Shopping Iguatemi', 'Shopping', '98.765.432/0001-11')">
-                            <img src="~/images/shopping.jpg" alt="Shopping Iguatemi" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
-                            <div class="suggestion-info">
-                                <h4>Shopping Iguatemi</h4>
-                                <span>Shopping Center</span>
-                            </div>
-                        </div>
-
-                        <div class="suggestion-card" onclick="preencherLocal('Loja de Conveniência', 'Loja', '11.222.333/0001-44')">
-                            <img src="~/images/loja.jpg" alt="Loja de Conveniência" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
-                            <div class="suggestion-info">
-                                <h4>Loja de Conveniência</h4>
-                                <span>Loja Comercial</span>
-                            </div>
-                        </div>
-
-                        <div class="suggestion-card" onclick="preencherLocal('Livraria Cultura', 'Livraria', '55.666.777/0001-88')">
-                            <img src="~/images/livraria.jpg" alt="Livraria Cultura" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;">
-                            <div class="suggestion-info">
-                                <h4>Livraria Cultura</h4>
-                                <span>Livraria</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="card-divider"></div>
-
-                <div class="card-right">
-                    <div class="create-header">
-                        <h3>Cadastrar Ponto</h3>
-                        <p>Ajude outros colecionadores a acharem este local</p>
-                    </div>
-
-                    <form method="post" action="/Locais/Criar" enctype="multipart/form-data">
-                        
-                        <label class="upload-placeholder" style="cursor: pointer;">
-                            <input type="file" name="Foto" accept="image/*" required style="display: none;" />
-                            <i class="fa-solid fa-camera-retro"></i>
-                            <span>Adicionar Foto<br>(Obrigatório)</span>
-                        </label>
-
-                        <div class="form-group">
-                            <label>Nome do Ponto de Troca</label>
-                            <input type="text" id="inputNomeLocal" name="Nome" required placeholder="Ex: Banca do João">
-                        </div>
-
-                        <div class="form-group">
-                            <label>CNPJ do Estabelecimento</label>
-                            <input type="text" id="inputCNPJ" name="CNPJ" required placeholder="00.000.000/0000-00">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Tipo de Local</label>
-                            <select id="selectTipoLocal" name="Tipo" required>
-                                <option value="" disabled selected>Selecione o tipo...</option>
-                                <option value="Banca">Banca de Jornal / Revistaria</option>
-                                <option value="Shopping">Shopping Center</option>
-                                <option value="Loja">Loja Comercial / Conveniência</option>
-                                <option value="Livraria">Livraria</option>
-                                <option value="Outro">Outro Estabelecimento</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn-add-local">
-                            <i class="fa-solid fa-location-crosshairs"></i> Compartilhar Local
-                        </button>
-                    </form>
-                </div>
-
-            </div>
-            
-        </main>
-
-        <nav class="bottom-nav">
-            <a href="/Home" class="nav-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </a>
-            <a href="/Album" class="nav-item">
-                <i class="fa-solid fa-book-open"></i>
-                <span>Álbuns</span>
-            </a>
-            <a href="/Locais" class="nav-item active">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>Locais</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fa-solid fa-comments"></i>
-                <span>Trocas</span>
-            </a>
-        </nav>
-    </div>
-
-    <script>
-            function preencherLocal(nome, tipo, cnpj) {
-                const campoNome = document.getElementById('inputNomeLocal');
-                const campoTipo = document.getElementById('selectTipoLocal');
-                const campoCNPJ = document.getElementById('inputCNPJ');
-
-                campoNome.value = nome;
-                campoTipo.value = tipo;
-                campoCNPJ.value = cnpj;
-
-                [campoNome, campoTipo, campoCNPJ].forEach(el => {
-                    el.style.transition = "background-color 0.3s";
-                    el.style.backgroundColor = "#eef2ff";
-                    el.style.borderColor = "#1D58E6";
-                
-                    setTimeout(() => {
-                        el.style.backgroundColor = "#fff";
-                        el.style.borderColor = "#E5E7EB";
-                    }, 600);
-                });
-            }
-    </script>
-    
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
+    <div class="container-cadastro-central">
+        <div class="create-header" style="margin-bottom: 25px; text-align: center;">
+            <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">Cadastrar Novo Ponto de Troca</h3>
+            <p style="color: #64748b; font-size: 0.9rem;">Insira os dados corretos para ajudar a comunidade a se encontrar</p>
         </div>
+
+        <form id="formCriarLocal" method="post" action="/Locais/Criar" enctype="multipart/form-data">
+
+            <div class="upload-placeholder" onclick="document.getElementById('inputFoto').click()" style="cursor: pointer; position: relative; overflow: hidden; height: 140px; background: #f8fafc; border: 2px dashed #1D58E6; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <img id="previewFoto" src="" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;" />
+                <div id="uploadContent" style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; color: #1D58E6;">
+                    <i class="fa-solid fa-camera-retro" style="font-size: 2rem; margin-bottom: 5px;"></i>
+                    <span style="font-size: 0.85rem; font-weight: 700; text-align: center;">Adicionar Imagem do Local</span>
+                </div>
+                <input type="file" id="inputFoto" name="Foto" accept="image/*" style="display: none;" />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #475569; display: block; margin-bottom: 5px;">Nome do Ponto de Troca</label>
+                <input type="text" id="inputNomeLocal" name="Nome" required placeholder="Ex: Banca Central de Osasco" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #475569; display: block; margin-bottom: 5px;">CNPJ do Estabelecimento</label>
+                <input type="text" id="inputCNPJ" name="CNPJ" required placeholder="00.000.000/0000-00" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #475569; display: block; margin-bottom: 5px;">Tipo de Local</label>
+                <select id="selectTipoLocal" name="Tipo" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: white;">
+                    <option value="" disabled selected>Selecione uma categoria...</option>
+                    <option value="Banca">Banca de Jornal / Revistaria</option>
+                    <option value="Shopping">Shopping Center</option>
+                    <option value="Loja">Loja Comercial / Conveniência</option>
+                    <option value="Livraria">Livraria</option>
+                    <option value="Outro">Outro Estabelecimento</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #475569; display: block; margin-bottom: 5px;">Endereço Completo</label>
+                <input type="text" id="inputEndereco" name="Endereco" required placeholder="Ex: Av. dos Autonomistas, 1400 - Industrial, Osasco - SP" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 25px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #475569; display: block; margin-bottom: 5px;">Área Interna de Troca (Descrição)</label>
+                <input type="text" id="inputArea" name="AreaTroca" required placeholder="Ex: Mesas amarelas na Praça de alimentação ao lado da Livraria" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px;">
+            </div>
+
+            <button type="submit" class="btn-add-local" style="width: 100%; background: #1D58E6; color: white; padding: 14px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">
+                <i class="fa-solid fa-location-dot"></i> Publicar Ponto de Troca
+            </button>
+        </form>
     </div>
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
-</body>
-</html>
+</main>
+
+@section Scripts {
+    <script src="~/js/locais-add.js" asp-append-version="true"></script>
+}

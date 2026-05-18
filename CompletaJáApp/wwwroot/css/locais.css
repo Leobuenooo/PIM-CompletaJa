@@ -1,182 +1,214 @@
-﻿/* Estilos Gerais - Tela de Locais */
+﻿/* ==========================================
+   ESTILOS GLOBAIS DA TELA DE LOCAIS
+   ========================================== */
+
 .local-content {
-    padding-top: 20px;
+    padding: 20px;
+    padding-bottom: 100px; /* Margem de segurança para o menu inferior não cobrir nada */
 }
 
-.local-header h2 {
-    font-size: 28px;
-    font-weight: 800;
-    color: #111;
-    margin-bottom: 5px;
-}
-
-.local-header p {
-    font-size: 14px;
-    color: #6B7280;
+.local-header {
     margin-bottom: 20px;
 }
 
-/* Botões */
+    .local-header h2 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+
+    .local-header p {
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+/* Botão de Adicionar Local */
 .btn-add-local {
     width: 100%;
-    background-color: #1D58E6;
+    background: #1D58E6;
     color: white;
     border: none;
-    padding: 15px;
+    padding: 12px 20px;
     border-radius: 12px;
     font-weight: 700;
-    font-size: 15px;
-    display: flex;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    cursor: pointer;
-    transition: 0.2s;
+    gap: 8px;
+    margin-bottom: 20px;
+    transition: background 0.2s;
 }
 
     .btn-add-local:hover {
-        background-color: #1545B8;
-        transform: scale(1.02);
+        background: #1545b8;
     }
 
-/* Barra de Busca */
+/* Caixa de Busca */
 .search-container {
+    position: relative;
+    margin-bottom: 25px;
     display: flex;
     align-items: center;
-    background: #fff;
-    border: 1px solid #E5E7EB;
-    padding: 12px 15px;
-    border-radius: 12px;
-    margin-bottom: 30px;
-    gap: 10px;
 }
 
     .search-container i {
-        color: #9CA3AF;
+        position: absolute;
+        left: 15px;
+        color: #94a3b8;
     }
 
     .search-container input {
-        border: none;
-        outline: none;
         width: 100%;
-        font-size: 14px;
+        padding: 12px 16px 12px 45px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
     }
 
-/* Grid e Cards */
+        .search-container input:focus {
+            border-color: #1D58E6;
+        }
+
+/* ==========================================
+   LISTAGEM E GRID DE CARDS (INDEX E BUSCA)
+   ========================================== */
+
 .local-list {
     display: flex;
     flex-direction: column;
-    gap: 25px;
-    padding-bottom: 50px;
+    gap: 16px;
 }
 
+/* O Card de Local Base */
 .local-card {
-    background: white;
+    background: #ffffff;
     border-radius: 20px;
-    padding: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border: 1px solid #F3F4F6;
+    padding: 16px;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    overflow: hidden;
+    min-width: 0; /* Impede que o cartão estoure o tamanho limite calculado pelo Grid */
 }
 
     .local-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     }
 
-/* Imagens e Detalhes do Local */
+/* Imagem interna do Card */
 .local-img {
-    width: 100%;
-    height: 160px;
-    border-radius: 15px;
-    margin-bottom: 15px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
-    object-position: center;
+    border-radius: 14px;
+    flex-shrink: 0; /* Trava o tamanho da imagem, impedindo-a de esmagar o texto */
 }
 
+/* Bloco de Informações (Direita da foto) */
 .local-details {
-    position: relative;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
+    min-width: 0; /* Força o contêiner de texto a entender o limite e quebrar as linhas */
+    text-align: left;
 }
 
     .local-details h3 {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 2px;
-        color: #111;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+        line-height: 1.2;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
     }
 
-.local-cnpj {
-    font-size: 13px;
-    color: #6B7280;
+.local-cnpj, .local-area {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
-.local-area {
-    font-size: 13px;
-    font-weight: 600;
-    color: #1D58E6;
-    margin-top: 4px;
-    margin-bottom: 4px;
-}
-
+/* Badge de Usuários Vinculados */
 .users-badge {
+    align-self: flex-start;
+    background: #eff6ff;
+    color: #1D58E6;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 4px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background-color: #F9FAFB;
-    border: 1px solid #F3F4F6;
-    color: #4B5563;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 6px 12px;
-    border-radius: 20px;
-    align-self: flex-start;
 }
 
-/* Responsividade Desktop */
+/* Card tracejado de Criação (Fim da lista) */
+.card-criar-novo {
+    background: #f8fafc;
+    border: 2px dashed #1D58E6 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 20px;
+    transition: 0.2s;
+    min-height: 154px;
+}
+
+    .card-criar-novo:hover {
+        background: #eff6ff;
+        transform: translateY(-2px);
+    }
+
+/* ==========================================
+   RESPONSIVIDADE: COMPORTAMENTO EM TELA LARGA (DESKTOP)
+   ========================================== */
 @media (min-width: 768px) {
+
     .local-content {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 20px;
-        align-items: center;
+        display: block !important; /* CORREÇÃO: Anula as duas colunas do home.css e força empilhamento vertical */
+        max-width: 1200px; /* Limita a largura para o conteúdo não ficar esticado demais */
+        margin: 0 auto; /* Centraliza todo o bloco principal no meio do monitor */
     }
 
     .local-header {
-        grid-column: 1;
-        grid-row: 1;
-        margin-bottom: 0;
+        text-align: center; /* Centraliza os títulos no topo */
+        margin-bottom: 25px;
     }
 
     .btn-add-local {
-        grid-column: 2;
-        grid-row: 1;
-        width: 220px;
-        margin-bottom: 0;
+        max-width: 320px; /* Limita a largura do botão de adicionar */
+        margin: 0 auto 20px auto; /* Centraliza o botão horizontalmente no topo */
     }
 
     .search-container {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        margin-bottom: 20px;
+        max-width: 600px; /* Limita a largura da barra de pesquisa */
+        margin: 0 auto 35px auto; /* Centraliza a barra acima dos cards e dá um espaçamento inferior */
     }
 
     .local-list {
-        grid-column: 1 / -1;
-        grid-row: 3;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 30px;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    .local-card {
-        max-width: 380px;
-        margin: 0 auto;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); /* Distribui os cards em colunas organizadas */
+        gap: 20px;
         width: 100%;
     }
 }

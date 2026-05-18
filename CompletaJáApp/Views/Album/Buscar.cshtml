@@ -1,0 +1,217 @@
+﻿@model IEnumerable<CompletaJaApp.Models.Album>
+@{
+    ViewData["Title"] = "Catálogo de Álbuns";
+    var meusAlbunsIds = ViewBag.MeusAlbunsIds as List<int> ?? new List<int>();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/albuns.css" asp-append-version="true" />
+    <style>
+        .btn-back-content {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .card-criar-novo {
+            background: #f8fafc;
+            border: 2px dashed #1D58E6 !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            padding: 20px;
+            border-radius: 20px;
+            transition: 0.2s;
+            min-height: 142px;
+        }
+
+            .card-criar-novo:hover {
+                background: #eff6ff;
+                transform: translateY(-2px);
+            }
+
+        .ja-coleciona {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .badge-check {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        @@media (min-width: 768px) {
+            .album-content {
+                display: block !important;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .album-header {
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .search-container {
+                max-width: 600px;
+                margin: 0 auto 35px auto;
+            }
+
+            .album-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+                gap: 20px;
+                width: 100%;
+            }
+        }
+
+        /* ===================================================================
+                   BLINDAGEM DO LAYOUT - ESTRUTURA ROW COMPLETA CONTRA COMPRESSÃO
+                   =================================================================== */
+        .album-card {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 12px !important;
+            gap: 16px !important;
+        }
+
+            /* CORREÇÃO DO COLLAPSE: Delimita o tamanho físico da miniatura da capa */
+            .album-card .album-img {
+                width: 120px !important;
+                height: 85px !important;
+                object-fit: cover !important;
+                flex-shrink: 0 !important;
+                border-radius: 10px !important;
+            }
+
+            /* Garante que a caixa de textos use 100% do espaço restante sem sumir */
+            .album-card .album-details {
+                flex: 1 !important;
+                min-width: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 4px !important;
+                overflow: hidden !important;
+                padding: 0 !important;
+            }
+
+            .album-card h3 {
+                font-size: 1.1rem !important;
+                font-weight: 800 !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                letter-spacing: normal !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+                line-height: 1.3 !important;
+                width: 100% !important;
+            }
+
+            .album-card .album-count {
+                font-size: 0.85rem !important;
+                color: #64748b !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                width: 100% !important;
+            }
+    </style>
+}
+
+<main class="content album-content">
+
+    <a href="/Album" class="btn-back-content">
+        <i class="fa-solid fa-arrow-left"></i> Voltar para Meus Álbuns
+    </a>
+
+    <div class="album-header">
+        <h2>Catálogo de Álbuns do Sistema</h2>
+        <p>Selecione uma coleção existente para começar a gerenciar ou cadastre uma nova localidade</p>
+    </div>
+
+    <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="inputBuscaGlobal" placeholder="Buscar álbum no catálogo..." onkeyup="filtrarCatalogo()">
+    </div>
+
+    <div class="album-list">
+
+        @foreach (var album in Model)
+        {
+            var coleciona = meusAlbunsIds.Contains(album.Id);
+            var cardClass = coleciona ? "album-card ja-coleciona" : "album-card";
+
+            <div class="@cardClass" data-nome="@album.Nome.ToLower()" onclick="confirmarColecao('@album.Id', '@album.Nome')">
+                <img src="@album.CapaUrl" class="album-img" alt="@album.Nome">
+                <div class="album-details">
+                    <h3>@album.Nome</h3>
+                    <div class="album-count">
+                        <i class="fa-regular fa-clone"></i> @album.QuantidadeTotalFigurinhas figurinhas no total
+                    </div>
+                    <div style="font-size: 0.75rem; color: #1D58E6; font-weight: 700;">
+                        <i class="fa-solid fa-users"></i> @album.UsuariosVinculados colecionadores ativos
+                    </div>
+                    @if (coleciona)
+                    {
+                        <span class="badge-check"><i class="fa-solid fa-circle-check"></i> Você já coleciona</span>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="card-criar-novo" onclick="window.location.href='/Album/Add'">
+            <i class="fa-solid fa-book-medical" style="font-size: 2.2rem; color: #1D58E6; margin-bottom: 8px;"></i>
+            <h4 style="color: #1D58E6; font-weight: 700; font-size: 1.05rem;">Não encontrou seu álbum?</h4>
+            <p style="font-size: 0.8rem; color: #64748b;">Clique aqui para cadastrar um novo modelo no sistema</p>
+        </div>
+
+    </div>
+</main>
+
+<form id="formVincularAlbum" method="post" action="/Album/Vincular" style="display:none;">
+    <input type="hidden" name="albumId" id="inputAlbumId" />
+</form>
+
+@section Scripts {
+    <script>
+        function filtrarCatalogo() {
+            const termo = document.getElementById('inputBuscaGlobal').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.album-card');
+            cards.forEach(card => {
+                const nome = card.getAttribute('data-nome') || "";
+                card.style.display = nome.includes(termo) ? 'flex' : 'none';
+            });
+        }
+
+        function confirmarColecao(id, nomeAlbum) {
+            const prosseguir = confirm(`Deseja adicionar o álbum "${nomeAlbum}" às suas coleções ativas?`);
+            if (prosseguir) {
+                document.getElementById('inputAlbumId').value = id;
+                document.getElementById('formVincularAlbum').submit();
+            }
+        }
+    </script>
+}

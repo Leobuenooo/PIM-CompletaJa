@@ -2,8 +2,11 @@
 using CompletaJaApp.Data;
 using CompletaJaApp.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System.IO;
-using Microsoft.AspNetCore.Http; // ADICIONADO: Necessário para usar Session
+using System;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace CompletaJáApp.Controllers
 {
@@ -19,12 +22,8 @@ namespace CompletaJáApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
-        // 3. RECEBE OS DADOS DE LOGIN (Atualizado com Sessão)
         [HttpPost]
         public IActionResult Login(string Email, string Senha)
         {
@@ -39,8 +38,8 @@ namespace CompletaJáApp.Controllers
 
             if (usuario != null)
             {
-                // --- AQUI ESTÁ A ALTERAÇÃO ---
-                // Guardamos o Nome e o caminho da Foto na Sessão para usar na Home
+                // Vincula as informações cruciais do usuário ativo na Sessão HTTP
+                HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
                 HttpContext.Session.SetString("NomeUsuario", usuario.Nome);
                 HttpContext.Session.SetString("FotoUsuario", usuario.FotoUrl);
 
@@ -60,8 +59,7 @@ namespace CompletaJáApp.Controllers
                 return View("Index");
             }
 
-            var emailJaExiste = _context.Usuarios.Any(u => u.Email == Email);
-            if (emailJaExiste)
+            if (_context.Usuarios.Any(u => u.Email == Email))
             {
                 ViewBag.Erro = "Este e-mail já está em uso.";
                 return View("Index");
@@ -74,13 +72,9 @@ namespace CompletaJáApp.Controllers
                 string nomeArquivo = Guid.NewGuid().ToString() + "_" + Path.GetFileName(FotoPerfil.FileName);
                 string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "usuarios");
 
-                if (!Directory.Exists(caminhoPasta))
-                {
-                    Directory.CreateDirectory(caminhoPasta);
-                }
+                if (!Directory.Exists(caminhoPasta)) Directory.CreateDirectory(caminhoPasta);
 
                 string caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
-
                 using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
                 {
                     await FotoPerfil.CopyToAsync(stream);
@@ -105,7 +99,6 @@ namespace CompletaJáApp.Controllers
             return RedirectToAction("Index", "Account");
         }
 
-        // Métodos de apoio (Termos, Esqueci Senha) permanecem iguais...
         [HttpGet]
         public IActionResult Termos() => View();
 

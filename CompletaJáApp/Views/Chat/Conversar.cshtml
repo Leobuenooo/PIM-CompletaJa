@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CompletaJaApp.Models.Mensagem>
+@{
+    ViewData["Title"] = "Chat";
+    var outroUsuario = ViewBag.OutroUsuario as CompletaJaApp.Models.Usuario;
+    int meuId = ViewBag.MeuId;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+}
+
+<main class="content">
+    <div class="chat-content">
+        <div class="chat-header">
+            <a href="/Troca" class="btn-back"><i class="fa-solid fa-arrow-left"></i></a>
+            <img src="@outroUsuario.FotoUrl" class="chat-avatar" alt="@outroUsuario.Nome">
+            <div class="chat-user-info">
+                <h3>@outroUsuario.Nome</h3>
+                <span><i class="fa-solid fa-circle" style="font-size:0.6rem; color:#22c55e;"></i> Online para trocas</span>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatBox">
+            @if (!Model.Any())
+            {
+                <div class="chat-empty">
+                    <p>Diga olá para @outroUsuario.Nome e combine um horário no ponto de encontro!</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var msg in Model)
+                {
+                    var isMine = msg.RemetenteId == meuId;
+                    var bubbleClass = isMine ? "msg-bubble mine" : "msg-bubble other";
+
+                    <div class="@bubbleClass">
+                        <div class="msg-text">@msg.Texto</div>
+                        <div class="msg-time">@msg.DataEnvio.ToString("HH:mm")</div>
+                    </div>
+                }
+            }
+        </div>
+
+        <form class="chat-input-area" action="/Chat/Enviar" method="post">
+            <input type="hidden" name="DestinatarioId" value="@outroUsuario.Id" />
+            <input type="text" name="Texto" placeholder="Escreva sua mensagem..." required autocomplete="off" />
+            <button type="submit" class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        // Faz a rolagem descer automaticamente para a última mensagem ao carregar a página
+        document.addEventListener("DOMContentLoaded", function() {
+            const chatBox = document.getElementById('chatBox');
+            if (chatBox) {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+    </script>
+}

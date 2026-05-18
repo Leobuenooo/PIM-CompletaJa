@@ -21,32 +21,129 @@ namespace CompletaJáApp.Controllers
             _env = env;
         }
 
+        // ==========================================
+        // 1. MEUS ÁLBUNS (Index) - Apenas os vinculados
+        // ==========================================
         public IActionResult Index()
         {
-            // Busca a foto da Sessão. Se não achar, coloca um avatar padrão.
             ViewBag.FotoUsuario = HttpContext.Session.GetString("FotoUsuario") ?? "/images/default-avatar.png";
+            int usuarioId = HttpContext.Session.GetInt32("UsuarioId") ?? 1;
 
-            var albunsDoBanco = _context.Albuns.ToList();
-            return View(albunsDoBanco);
+            var meusAlbunsIds = _context.UsuariosAlbuns
+                .Where(ua => ua.UsuarioId == usuarioId)
+                .Select(ua => ua.AlbumId)
+                .ToList();
+
+            var meusAlbuns = _context.Albuns
+                .Where(a => meusAlbunsIds.Contains(a.Id))
+                .OrderByDescending(a => a.UsuariosVinculados)
+                .ToList();
+
+            return View(meusAlbuns);
         }
 
+        // ==========================================
+        // 2. CATÁLOGO GLOBAL (Buscar) - Classificado por popularidade
+        // ==========================================
+        public IActionResult Buscar()
+        {
+            ViewBag.FotoUsuario = HttpContext.Session.GetString("FotoUsuario") ?? "/images/default-avatar.png";
+            int usuarioId = HttpContext.Session.GetInt32("UsuarioId") ?? 1;
+
+            ViewBag.MeusAlbunsIds = _context.UsuariosAlbuns
+                .Where(ua => ua.UsuarioId == usuarioId)
+                .Select(ua => ua.AlbumId)
+                .ToList();
+
+            // CLASSIFICAÇÃO: Ordena do álbum com mais usuários vinculados para o menor
+            var todosAlbuns = _context.Albuns
+                .OrderByDescending(a => a.UsuariosVinculados)
+                .ToList();
+
+            return View(todosAlbuns);
+        }
+
+        // ==========================================
+        // 3. VINCULAR USUÁRIO AO ÁLBUM EXISTENTE
+        // ==========================================
+        [HttpPost]
+        public IActionResult Vincular(int albumId)
+        {
+            int usuarioId = HttpContext.Session.GetInt32("UsuarioId") ?? 1;
+
+            if (!_context.UsuariosAlbuns.Any(ua => ua.UsuarioId == usuarioId && ua.AlbumId == albumId))
+            {
+                _context.UsuariosAlbuns.Add(new UsuarioAlbum { UsuarioId = usuarioId, AlbumId = albumId });
+
+                var album = _context.Albuns.Find(albumId);
+                if (album != null) album.UsuariosVinculados += 1;
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // ==========================================
+        // 4. FORMULÁRIO DE CADASTRO (Add)
+        // ==========================================
         public IActionResult Add()
         {
             ViewBag.FotoUsuario = HttpContext.Session.GetString("FotoUsuario") ?? "/images/default-avatar.png";
-
-            // Busca os 5 álbuns mais recentes (Futuramente, mudaremos para ranking de mais colecionados)
-            var sugestoes = _context.Albuns.OrderByDescending(a => a.Id).Take(5).ToList();
-
-            return View(sugestoes);
+            return View();
         }
 
+        // ==========================================
+        // 5. PROCESSA A CRIAÇÃO DO ÁLBUM GLOBAL
+        // ==========================================
+        [HttpPost]
+        public async Task<IActionResult> Criar(string Nome, int TotalFigurinhas, IFormFile Capa)
+        {
+            if (string.IsNullOrWhiteSpace(Nome) || TotalFigurinhas <= 0 || Capa == null || Capa.Length == 0)
+            {
+                return RedirectToAction("Add");
+            }
+
+            string nomeArquivo = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Capa.FileName);
+            string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "albuns");
+
+            if (!Directory.Exists(caminhoPasta)) Directory.CreateDirectory(caminhoPasta);
+
+            string caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
+            using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
+            {
+                await Capa.CopyToAsync(stream);
+            }
+
+            var novoAlbum = new Album
+            {
+                Nome = Nome,
+                QuantidadeTotalFigurinhas = TotalFigurinhas,
+                CapaUrl = "/images/albuns/" + nomeArquivo,
+                UsuariosVinculados = 1 // Nasce com 1 vínculo (o criador)
+            };
+            _context.Albuns.Add(novoAlbum);
+            _context.SaveChanges();
+
+            int usuarioId = HttpContext.Session.GetInt32("UsuarioId") ?? 1;
+            _context.UsuariosAlbuns.Add(new UsuarioAlbum { UsuarioId = usuarioId, AlbumId = novoAlbum.Id });
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        // ==========================================
+        // 6. VALIDAÇÃO DE DUPLICIDADE (Algoritmo Restaurado)
+        // ==========================================
         [HttpPost]
         public IActionResult VerificarDuplicidade(string nome, int quantidade)
         {
             if (string.IsNullOrWhiteSpace(nome) || quantidade <= 0)
                 return Json(new { duplicado = false });
 
-            var albunsMesmaQuantidade = _context.Albuns.Where(a => a.QuantidadeTotalFigurinhas == quantidade).ToList();
+            var albunsMesmaQuantidade = _context.Albuns
+                .Where(a => a.QuantidadeTotalFigurinhas == quantidade)
+                .ToList();
 
             if (!albunsMesmaQuantidade.Any())
                 return Json(new { duplicado = false });
@@ -66,42 +163,6 @@ namespace CompletaJáApp.Controllers
             }
 
             return Json(new { duplicado = false });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Criar(string Nome, string Categoria, int TotalFigurinhas, IFormFile Capa)
-        {
-            if (string.IsNullOrWhiteSpace(Nome) || string.IsNullOrWhiteSpace(Categoria) || TotalFigurinhas <= 0 || Capa == null || Capa.Length == 0)
-            {
-                return RedirectToAction("Add");
-            }
-
-            string nomeArquivo = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Capa.FileName);
-            string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "albuns");
-
-            if (!Directory.Exists(caminhoPasta))
-            {
-                Directory.CreateDirectory(caminhoPasta);
-            }
-
-            string caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
-
-            using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-            {
-                await Capa.CopyToAsync(stream);
-            }
-
-            var novoAlbum = new Album
-            {
-                Nome = Nome,
-                QuantidadeTotalFigurinhas = TotalFigurinhas,
-                CapaUrl = "/images/albuns/" + nomeArquivo
-            };
-
-            _context.Albuns.Add(novoAlbum);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
         }
     }
 }

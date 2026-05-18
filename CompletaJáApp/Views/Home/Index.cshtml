@@ -1,139 +1,84 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿@model IEnumerable<CompletaJáApp.Controllers.MatchDashboardViewModel>
+@using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "Home - CompletaJá";
-    Layout = null;
-
-    // Recupera os dados da Sessão ("Crachá" do usuário)
-    // Se por algum motivo a sessão estiver vazia, ele usa os valores padrão
+    ViewData["Title"] = "Home";
     var nomeUsuario = Context.Session.GetString("NomeUsuario") ?? "Colecionador";
-    var fotoUsuario = Context.Session.GetString("FotoUsuario") ?? "/images/default-avatar.png";
 }
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/home.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-</head>
-<body>
 
-    <div class="app-container">
-        <header class="top-header">
-            <div class="user-info">
-                <img src="@fotoUsuario" alt="Perfil" class="avatar-top" style="object-fit: cover;">
-                <span class="logo-text">CompletaJá</span>
+<main class="content">
+    <div class="home-grid">
+
+        <h1 class="welcome-text">Olá,<br>@nomeUsuario!</h1>
+
+        <div class="stats-row">
+            <div class="stat-card blue-card">
+                <span class="stat-number">@ViewBag.Repetidas</span>
+                <span class="stat-label">REPETIDAS</span>
             </div>
-            <div class="header-actions">
-                <a asp-controller="Home" asp-action="Sair" class="btn-sair">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
-                </a>
-                <i class="fa-regular fa-bell icon-bell"></i>
+            <div class="stat-card white-card">
+                <span class="stat-number red-text">@ViewBag.Faltantes</span>
+                <span class="stat-label">FALTANTES</span>
             </div>
-        </header>
-
-        <main class="content">
-            <h1 class="welcome-text">Olá,<br>@nomeUsuario!</h1>
-
-            <div class="stats-row">
-                <div class="stat-card blue-card">
-                    <span class="stat-number">42</span>
-                    <span class="stat-label">REPETIDAS</span>
-                </div>
-                <div class="stat-card white-card">
-                    <span class="stat-number red-text">18</span>
-                    <span class="stat-label">FALTANTES</span>
-                </div>
-            </div>
-
-            <div class="shortcuts">
-                <h3>Atalhos</h3>
-
-                <a href="/Album" class="main-shortcut" style="text-decoration: none;">
-                    <div class="shortcut-info">
-                        <strong>Meus Álbuns</strong>
-                        <span>Gerencie suas coleções</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-
-                <div class="secondary-shortcuts">
-                    <a href="/Locais" class="short-box yellow-box" style="text-decoration: none;">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <div class="inner-text">
-                            <strong>Gerenciar Locais</strong>
-                        </div>
-                    </a>
-                    <div class="short-box light-blue-box">
-                        <i class="fa-solid fa-handshake"></i>
-                        <div class="inner-text">
-                            <strong>Encontrar Trocas</strong>
-                            <small>Matches automáticos</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <section class="matches">
-                <div class="section-header">
-                    <h3>Matches Recentes</h3>
-                    <a href="#">Ver todos</a>
-                </div>
-                <div class="matches-list">
-                    <div class="match-item">
-                        <div class="avatar-wrapper">
-                            <img src="https://i.pravatar.cc/150?u=marcos" alt="Marcos">
-                        </div>
-                        <strong>Marcos</strong>
-                        <span class="match-count">3 matches</span>
-                    </div>
-                    <div class="match-item">
-                        <div class="avatar-wrapper">
-                            <img src="https://i.pravatar.cc/150?u=juliana" alt="Juliana">
-                        </div>
-                        <strong>Juliana</strong>
-                        <span class="match-count">5 matches</span>
-                    </div>
-                    <div class="match-item">
-                        <div class="avatar-wrapper">
-                            <img src="https://i.pravatar.cc/150?u=ricardo" alt="Ricardo">
-                        </div>
-                        <strong>Ricardo</strong>
-                        <span class="match-count">2 matches</span>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <nav class="bottom-nav">
-            <a href="/Home" class="nav-item active">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </a>
-            <a href="/Album" class="nav-item">
-                <i class="fa-solid fa-book-open"></i>
-                <span>Álbuns</span>
-            </a>
-            <a href="/Locais" class="nav-item">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>Locais</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fa-solid fa-comments"></i>
-                <span>Trocas</span>
-            </a>
-        </nav>
-    </div>
-    
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
         </div>
+
+        <div class="shortcuts">
+            <h3>Atalhos</h3>
+
+            <a href="/Album" class="main-shortcut" style="text-decoration: none;">
+                <div class="shortcut-info">
+                    <strong>Meus Álbuns</strong>
+                    <span>Gerencie suas coleções</span>
+                </div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+
+            <div class="secondary-shortcuts">
+                <a href="/Locais" class="short-box yellow-box" style="text-decoration: none;">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="inner-text">
+                        <strong>Gerenciar Locais</strong>
+                    </div>
+                </a>
+
+                <a href="/Troca" class="short-box light-blue-box" style="text-decoration: none;">
+                    <i class="fa-solid fa-handshake"></i>
+                    <div class="inner-text">
+                        <strong>Encontrar Trocas</strong>
+                        <small>Matches automáticos</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <section class="matches">
+            <div class="section-header">
+                <h3>Matches Recentes</h3>
+                <a href="/Troca">Ver todos</a>
+            </div>
+
+            <div class="matches-list">
+                @if (!Model.Any())
+                {
+                    <div style="text-align: center; width: 100%; color: #94a3b8; font-size: 0.9rem; padding: 20px 0;">
+                        <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 10px; color: #cbd5e1;"></i>
+                        <p>Nenhuma conversa recente.<br>Vá em <b>Encontrar Trocas</b> para começar!</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var match in Model)
+                    {
+                        <a href="/Chat/Conversar?usuarioId=@match.UsuarioId" class="match-item" style="text-decoration: none; color: inherit;">
+                            <div class="avatar-wrapper">
+                                <img src="@match.FotoUrl" alt="@match.Nome" style="object-fit: cover;">
+                            </div>
+                            <strong>@match.Nome</strong>
+                            <span class="match-count">@match.TotalMensagens msgs</span>
+                        </a>
+                    }
+                }
+            </div>
+        </section>
+
     </div>
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-    </script>
-</body>
-</html>
+</main>
