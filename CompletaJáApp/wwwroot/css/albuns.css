@@ -1,6 +1,7 @@
 ﻿/* Configurações de espaçamento da seção principal */
 .album-content {
-    padding-top: 20px;
+    padding-top: 0px;
+    margin-top: 0px;
 }
 
 /* Tipografia e margens do cabeçalho */
@@ -168,7 +169,7 @@
 /* Ajustes de layout para dispositivos desktop */
 @media (min-width: 768px) {
     .album-content {
-        display: grid;
+        display: block;
         grid-template-columns: 1fr auto;
         gap: 20px;
         align-items: center;

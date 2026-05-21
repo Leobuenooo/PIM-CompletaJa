@@ -185,29 +185,29 @@
 @media (min-width: 768px) {
 
     .local-content {
-        display: block !important; /* CORREÇÃO: Anula as duas colunas do home.css e força empilhamento vertical */
-        max-width: 1200px; /* Limita a largura para o conteúdo não ficar esticado demais */
-        margin: 0 auto; /* Centraliza todo o bloco principal no meio do monitor */
+        display: block !important;
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     .local-header {
-        text-align: center; /* Centraliza os títulos no topo */
+        text-align: center;
         margin-bottom: 25px;
     }
 
     .btn-add-local {
-        max-width: 320px; /* Limita a largura do botão de adicionar */
-        margin: 0 auto 20px auto; /* Centraliza o botão horizontalmente no topo */
+        max-width: 320px;
+        margin: 0 auto 20px auto;
     }
 
     .search-container {
-        max-width: 600px; /* Limita a largura da barra de pesquisa */
-        margin: 0 auto 35px auto; /* Centraliza a barra acima dos cards e dá um espaçamento inferior */
+        max-width: 600px;
+        margin: 0 auto 35px auto;
     }
 
     .local-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); /* Distribui os cards em colunas organizadas */
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
         gap: 20px;
         width: 100%;
     }

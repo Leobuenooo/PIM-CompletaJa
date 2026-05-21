@@ -2,37 +2,31 @@
     ViewData["Title"] = "CompletaJá - Login";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <!-- Link para o seu CSS -->
     <link rel="stylesheet" href="~/css/login.css" />
-    <!-- FontAwesome para os ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
     <div class="app-container">
-        <!-- Cabeçalho -->
         <div class="header">
             <div class="logo-icon">
-                <i class="fa-solid fa-layer-group"></i> <!-- Ícone representativo -->
+                <i class="fa-solid fa-layer-group"></i>
             </div>
             <h1>CompletaJá</h1>
             <p>Complete seu álbum com amigos!</p>
         </div>
 
         <div class="form-container">
-            <!-- Toggle de Navegação -->
             <div class="toggle-box">
                 <button id="btn-login" class="toggle-btn active" onclick="switchTab('login')">Entrar</button>
                 <button id="btn-signup" class="toggle-btn" onclick="switchTab('signup')">Criar Conta</button>
             </div>
 
-            <!-- Formulário de LOGIN -->
             <form id="form-login" action="/Account/Login" method="post">
                 
                 @if (ViewBag.Erro != null)
@@ -68,7 +62,6 @@
                 </button>
             </form>
 
-            <!-- Formulário de CRIAR CONTA (Oculto por padrão) -->
             <form id="form-signup" asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data" onsubmit="return validarFormularioCadastro()" style="display: none;">
                 <div class="input-group">
                     <label>Nome ou Apelido</label>
@@ -95,9 +88,9 @@
 
                 <div class="input-group">
                     <label>Foto de Perfil (Opcional)</label>
-                    <div class="input-field">
+                    <div class="input-field" style="overflow: hidden; padding-right: 5px;">
                         <i class="fa-regular fa-image"></i>
-                        <input type="file" name="FotoPerfil" accept="image/*" />
+                        <input type="file" name="FotoPerfil" accept="image/*" style="width: 100%; background: transparent; border: none; outline: none; font-size: 12px; padding: 0;" />
                     </div>
                 </div>
 
@@ -126,11 +119,10 @@
         </div>
 
         <div class="footer">
-            <p>Ao continuar, você concorda com nossos <br> <a asp-controller="Account" asp-action="Termos">Termos de Uso e Privacidade</a>
+            <p>Ao continuar, você concorda com nossos <br> <a asp-controller="Account" asp-action="Termos">Termos de Uso e Privacidade</a></p>
         </div>
     </div>
 
-    <!-- JavaScript para a interatividade -->
     <script>
             function switchTab(tab) {
                 const formLogin = document.getElementById('form-login');
@@ -204,15 +196,15 @@
             }
     </script>
 
-        <div vw class="enabled">
-            <div vw-access-button class="active"></div>
-            <div vw-plugin-wrapper>
-                <div class="vw-plugin-top-wrapper"></div>
-            </div>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
         </div>
-        <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-        <script>
-            new window.VLibras.Widget('https://vlibras.gov.br/app');
-        </script>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 </body>
 </html>

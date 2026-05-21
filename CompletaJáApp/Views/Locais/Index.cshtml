@@ -6,143 +6,58 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/locais.css" asp-append-version="true" />
     <style>
-        .local-header {
-            text-align: center;
-            margin-bottom: 25px;
-            width: 100%;
+        @@media (max-width: 600px) {
+            .local-card { flex-direction: column !important; text-align: center !important; }
+            .local-img { width: 100% !important; height: 180px !important; margin-bottom: 10px !important; }
+            .local-details { align-items: center !important; width: 100% !important; }
         }
-
-        .btn-add-local {
-            max-width: 320px;
-            margin: 0 auto 20px auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 35px auto;
-            width: 100%;
-        }
-
-        .local-list {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-            gap: 20px !important;
-            width: 100% !important;
-        }
-
-        .local-card {
-            flex: 1 1 350px !important;
-            max-width: 500px !important;
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            box-sizing: border-box !important;
-            padding: 15px !important;
-            gap: 16px !important;
-            background: white !important;
-            border-radius: 16px !important;
-            border: 1px solid #E5E7EB !important;
-            text-decoration: none !important;
-            color: inherit !important;
-            transition: transform 0.2s !important;
-        }
-
-            .local-card:hover {
-                transform: translateY(-3px) !important;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
-            }
-
-            .local-card .local-img {
-                width: 100px !important;
-                height: 100px !important;
-                object-fit: cover !important;
-                flex-shrink: 0 !important;
-                border-radius: 12px !important;
-            }
-
-            .local-card .local-details {
-                flex: 1 !important;
-                min-width: 0 !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 4px !important;
-                overflow: hidden !important;
-            }
-
-            .local-card h3 {
-                font-size: 1.15rem !important;
-                font-weight: 800 !important;
-                color: #0f172a !important;
-                margin: 0 !important;
-                line-height: 1.2 !important;
-            }
-
-            .local-card span, .local-card .users-badge {
-                font-size: 0.8rem !important;
-                color: #64748b !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                width: 100% !important;
-            }
     </style>
 }
 
 <main class="content local-content">
-    <div style="width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+    <div class="local-header" style="text-align: center; margin-bottom: 30px;">
+        <h2>Meus Locais</h2>
+        <p>Pontos de encontro onde você realiza trocas</p>
+    </div>
 
-        <div class="local-header">
-            <h2>Meus Locais</h2>
-            <p>Pontos de encontro onde você realiza trocas</p>
-        </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+        <a href="/Locais/Buscar" class="btn-add-local" style="max-width: 320px; text-decoration: none;">
+            <i class="fa-solid fa-magnifying-glass-location"></i> Adicionar Novo Local
+        </a>
+    </div>
 
-        <button onclick="window.location.href='/Locais/Buscar'" class="btn-add-local">
-            <i class="fa-solid fa-magnifying-glass-location"></i> Adicionar Local
-        </button>
+    <div class="search-container" style="max-width: 500px; margin: 0 auto 35px auto;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="inputBuscaLocal" placeholder="Filtrar locais..." onkeyup="filtrarLocais()">
+    </div>
 
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="inputBuscaLocal" placeholder="Filtrar meus locais..." onkeyup="filtrarLocais()">
-        </div>
-
-        <div class="local-list">
-            @if (!Model.Any())
-            {
-                <div style="flex: 1 1 100%; text-align: center; color: #6b7280; padding: 40px 20px;">
-                    <i class="fa-solid fa-map-pinned" style="font-size: 4rem; margin-bottom: 20px; color: #cbd5e1;"></i>
-                    <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 10px;">Nenhum local vinculado</h3>
-                    <p style="font-size: 1rem; color: #64748b; max-width: 500px; margin: 0 auto;">
-                        Você não está vinculado a nenhum local. Clique em <b>"Adicionar Local"</b> para encontrar pontos ativos!
-                    </p>
+    <div class="local-list">
+        @foreach (var local in Model)
+        {
+            <a href="/Locais/Detalhes?id=@local.Id" class="local-card" style="text-decoration: none !important;">
+                <img src="@local.FotoUrl" class="local-img" alt="@local.Nome">
+                <div class="local-details">
+                    <h3>@local.Nome</h3>
+                    <div class="local-area">
+                        <i class="fa-solid fa-location-dot"></i> @local.Endereco
+                    </div>
+                    <div class="users-badge" style="margin-top: 4px;">
+                        <i class="fa-solid fa-users"></i> @local.UsuariosVinculados colecionadores
+                    </div>
                 </div>
-            }
-            else
-            {
-                @foreach (var local in Model)
-                {
-                    <a href="/Locais/Detalhes?id=@local.Id" class="local-card">
-                        <img src="@local.FotoUrl" class="local-img" alt="@local.Nome">
-                        <div class="local-details">
-                            <h3>@local.Nome</h3>
-                            <span class="local-cnpj">CNPJ: @local.CNPJ</span>
-                            <span class="local-area"><strong>Endereço:</strong> @local.Endereco</span>
-                            <span class="local-area"><strong>Área:</strong> @local.AreaTroca</span>
-                            <div class="users-badge" style="color: #1D58E6 !important; font-weight: 700 !important; margin-top: 4px !important;">
-                                <i class="fa-solid fa-circle-info"></i> @local.UsuariosVinculados Colecionadores
-                            </div>
-                        </div>
-                    </a>
-                }
-            }
-        </div>
-
+            </a>
+        }
     </div>
 </main>
 
 @section Scripts {
-    <script src="~/js/locais-index.js" asp-append-version="true"></script>
+    <script>
+        function filtrarLocais() {
+            const termo = document.getElementById('inputBuscaLocal').value.toLowerCase().trim();
+            document.querySelectorAll('.local-card').forEach(card => {
+                const titulo = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = titulo.includes(termo) ? 'flex' : 'none';
+            });
+        }
+    </script>
 }
