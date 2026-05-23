@@ -108,12 +108,25 @@ namespace CompletaJáApp.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(string Email)
         {
+            // 1. Verifica se o usuário digitou algo
             if (string.IsNullOrEmpty(Email))
             {
                 ViewBag.Erro = "Por favor, informe seu e-mail.";
                 return View();
             }
-            ViewBag.Sucesso = $"Se o e-mail {Email} estiver cadastrado, enviaremos um link de recuperação.";
+
+            // 2. SIMULAÇÃO: Verifica no Banco de Dados se o e-mail realmente existe
+            var usuarioExiste = _context.Usuarios.Any(u => u.Email == Email);
+
+            if (!usuarioExiste)
+            {
+                // Se não existe, devolvemos a mensagem de erro para a tela
+                ViewBag.Erro = "Este e-mail não foi encontrado em nossa base de dados.";
+                return View();
+            }
+
+            // 3. Se chegou aqui, o e-mail existe! Ativamos a mensagem de sucesso
+            ViewBag.Sucesso = $"Tudo certo! As instruções de recuperação foram enviadas para o e-mail {Email} (Simulação).";
             return View();
         }
     }

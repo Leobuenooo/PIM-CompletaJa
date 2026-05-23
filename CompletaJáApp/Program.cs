@@ -1,6 +1,7 @@
 // Importando as pastas que precisamos (coloque no topo do arquivo)
 using Microsoft.EntityFrameworkCore;
 using CompletaJaApp.Data;
+using CompletaJaApp.Hubs; // ADICIONADO 1: Importa a pasta do seu ChatHub
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<CompletaJaContext>(options =>
 // Habilita a memória (Sessão) para o nosso sistema de Login
 builder.Services.AddSession();
 
+// ADICIONADO 2: Habilita o motor do SignalR (tempo real) no servidor
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // 2. CONFIGURANDO O COMPORTAMENTO DO SITE
@@ -25,12 +29,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 // Ativa a Sessão de fato (Aviso: tem que ficar exatamente aqui!)
 app.UseSession();
-
 app.UseAuthorization();
 
 // 3. CONFIGURANDO A TELA INICIAL
@@ -38,5 +40,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Index}/{id?}");
+
+// ADICIONADO 3: Cria a rota que o JavaScript vai usar para conectar no Chat
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

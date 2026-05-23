@@ -54,6 +54,12 @@ function abrirModal(codigo, nome, qtd) {
 
     qtdAtual = qtd;
     atualizarVisorQtd();
+
+    // A MARRETA DO JAVASCRIPT: Força o VLibras a sumir instantaneamente
+    const widgetVLibras = document.querySelector('[vw]');
+    if (widgetVLibras) {
+        widgetVLibras.style.setProperty('display', 'none', 'important');
+    }
 }
 
 /**
@@ -61,6 +67,12 @@ function abrirModal(codigo, nome, qtd) {
  */
 function fecharModal() {
     document.getElementById('modalSticker').style.display = 'none';
+
+    // O modal fechou, devolvemos o VLibras para a tela
+    const widgetVLibras = document.querySelector('[vw]');
+    if (widgetVLibras) {
+        widgetVLibras.style.setProperty('display', 'block', 'important');
+    }
 }
 
 /**
@@ -87,7 +99,7 @@ function atualizarVisorQtd() {
 window.onclick = function (event) {
     let modal = document.getElementById('modalSticker');
     if (event.target == modal) {
-        fecharModal();
+        fecharModal(); // Como o fecharModal já tem o comando para voltar o VLibras, ele voltará ao normal aqui também!
     }
 }
 
